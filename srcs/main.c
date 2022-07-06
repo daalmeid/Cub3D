@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/Cub3D.h"
-#include "headers/libft.h"
+#include "../headers/Cub3D.h"
+#include "../headers/libft.h"
 #include <stdio.h>
 
 int	cross_handler(void *param)

@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/01 12:23:28 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/06 12:50:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# include "/mnt/c/Users/dario/Desktop/MLX/mlx_linux/mlx.h"
+# include "../mlx_linux/mlx.h"
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>

@@ -6,7 +6,7 @@
 #    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/01 12:23:11 by marvin           ###   ########.fr        #
+#    Updated: 2022/07/06 13:20:15 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,20 +31,21 @@ CFLAGS	=		-Wall -Werror -Wextra
 
 ################## FILES ###################
 
-SRCS	=	main.c\
-			image_draw_utils.c\
-			raycaster.c\
-			handlers.c\
-			collision.c
+SRCS	=	srcs/main.c\
+			srcs/image_draw_utils.c\
+			srcs/raycaster.c\
+			srcs/handlers.c\
+			srcs/collision.c
 
 OBJ	=	$(patsubst %.c, %.o, $(SRCS))
 
 %.o: %.c
 	$(CC) -Wall -Wextra -Werror -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
-LIB_DIR	=	-L./libft -L/usr/local/lib/
-LIBS	=	-lft -lmlx
-FRMWRKS	=	-framework OpenGL -framework AppKit
+#LIB_DIR	=	-L./libft -L/usr/local/lib/
+#LIBS	=	-lft -lmlx
+#FRMWRKS	=	-framework OpenGL -framework AppKit
+
 
 ################## RULES ###################
 

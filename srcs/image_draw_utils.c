@@ -6,12 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 13:15:14 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/06/30 16:34:58 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/06 13:21:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/Cub3D.h"
-#include "headers/libft.h"
+#include "../headers/Cub3D.h"
+#include "../headers/libft.h"
 
 t_data	handle_new_image(void **mlx)
 {

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/Cub3D.h"
-#include "headers/libft.h"
+#include "../headers/Cub3D.h"
+#include "../headers/libft.h"
 
 
 void	raycaster(t_player p, int worldMap[24][24])

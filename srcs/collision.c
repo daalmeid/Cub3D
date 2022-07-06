@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/Cub3D.h"
-#include "headers/libft.h"
+#include "../headers/Cub3D.h"
+#include "../headers/libft.h"
 
 bool	collider(double posX, double posY, int worldMap[24][24])
 {
