@@ -14,7 +14,7 @@
 #include "../headers/libft.h"
 #include <stdio.h>
 
-int	cross_handler(void *param)
+static int	cross_handler(void *param)
 {
 	void	**mlx;
 
@@ -30,7 +30,7 @@ static void	hooks(t_player *p)
 	mlx_hook(p->mlx[1], 17, 0, cross_handler, p->mlx);
 }
 
-static void prep_ptrs(void **mlx) 
+static void	prep_ptrs(void **mlx)
 {
 	mlx[0] = mlx_init();
 	if (!mlx[0])
@@ -54,8 +54,8 @@ static void prep_ptrs(void **mlx)
 
 int	main(void)
 {
-	
-	int worldMap[24][24]=
+	t_player	p;
+	int			world_map[24][24]=
 	{
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -67,7 +67,7 @@ int	main(void)
 	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -82,21 +82,16 @@ int	main(void)
 	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 	};
-	
-	t_player	p;
 
-	p.posX = 22;
-	p.posY = 12;
-	p.dirX = -1;
-	p.dirY = 0;
-
+	p.pos_x = 22;
+	p.pos_y = 12;
+	p.dir_x = -1;
+	p.dir_y = 0;
 	prep_ptrs(p.mlx);
 	hooks(&p);
-
-	p.camPlane.dirX = 0;
-	p.camPlane.dirY = 0.66;
-
-	raycaster(p, worldMap);
+	p.cam_plane.dir_x = 0;
+	p.cam_plane.dir_y = 0.66;
+	raycaster(p, world_map);
 	mlx_put_image_to_window(p.mlx[0], p.mlx[1], p.mlx[2], 0, 0);
 	mlx_loop(p.mlx[0]);
 }

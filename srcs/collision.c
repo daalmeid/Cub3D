@@ -13,25 +13,26 @@
 #include "../headers/Cub3D.h"
 #include "../headers/libft.h"
 
-bool	collider(double posX, double posY, int worldMap[24][24])
+bool	collider(double pos_x, double pos_y, int world_map[24][24])
 {
-		double	theta = 0.05;
+	double	theta;
+	double	v_x;
+	double	v_y;
+	double	old_dir;
 
-		double	vX = 0.2;
-		double	vY = 0;
-
-		if (worldMap[(int)(posY + vY)][(int)(posX + vX)] == 1)
-			return false;
-		while (theta < 6.25) //~360 degrees in radians
-		{
-			double cs = cos(theta);
-			double sn = sin(theta);
-			double oldDir = vX;
-			vX = vX * cs - vY * sn;
-			vY = oldDir * sn + vY * cs;
-			if (worldMap[(int)(posY + vY)][(int)(posX + vX)] == 1)
-				return false;
-			theta += 0.05;
-		}
-		return (true);
+	theta = 0.05;
+	v_x = 0.2;
+	v_y = 0;
+	if (world_map[(int)(pos_y + v_y)][(int)(pos_x + v_x)] == 1)
+		return (false);
+	while (theta < 6.25) //~360 degrees in radians
+	{
+		old_dir = v_x;
+		v_x = v_x * cos(theta) - v_y * sin(theta);
+		v_y = old_dir * sin(theta) + v_y * cos(theta);
+		if (world_map[(int)(pos_y + v_y)][(int)(pos_x + v_x)] == 1)
+			return (false);
+		theta += 0.05;
+	}
+	return (true);
 }
