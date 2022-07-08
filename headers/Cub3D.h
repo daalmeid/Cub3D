@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/07 15:20:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/08 14:36:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_camPlane
 
 typedef struct s_player
 {
-	void		*mlx[3];
+	void		*mlx[7];
 	
 	double		pos_x;
 	double		pos_y;
@@ -48,6 +48,8 @@ typedef struct s_player
 	double		dir_y;
 
 	t_camPlane	cam_plane;
+
+	t_data		tex_data[4];
 } t_player;
 
 
@@ -76,8 +78,20 @@ typedef enum	e_keys
 	KEY_RGT_ARR = 65363
 } t_keys;
 
-t_data	handle_new_image(void **mlx);
+typedef enum	e_mlx
+{
+	MLX_INIT = 0,
+	MLX_WINDOW = 1,
+	MLX_IMG_MAIN = 2,
+	MlX_TEX_NO = 3,
+	MlX_TEX_SO = 4,
+	MlX_TEX_WE = 5,
+	MlX_TEX_EA = 6
+} t_mlx;
+
+t_data	handle_new_image(void *mlx_image);
 void	my_pixel_put(t_data *data, int x, int y, int color);
+unsigned int	*get_img_pixel(t_data *data, int x, int y);
 void	raycaster(t_player p, int worldMap[24][24]);
 int		handlers(int key, void *param);
 bool	collider(double pos_x, double pos_y, int worldMap[24][24]);

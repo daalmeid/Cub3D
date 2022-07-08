@@ -15,7 +15,7 @@
 
 //4- Calculates lowest and highest pixel to fill in current stripe (ceiling,
 //wall and floor).
-static void	ft_drawing(int line_height, char side, int x, t_player *p)
+static void	ft_drawing(int line_height, char side, int x, t_player *p, int tex_x)
 {
 	t_data	img_data;
 	int		draw_start;
@@ -23,28 +23,36 @@ static void	ft_drawing(int line_height, char side, int x, t_player *p)
 	int		color;
 	int		painter;
 
-	img_data = handle_new_image(p->mlx);
+	img_data = handle_new_image(p->mlx[2]);
 	draw_start = -line_height / 2 + map_height / 2;
 	if (draw_start < 0)
 		draw_start = 0;
 	draw_end = line_height / 2 + map_height / 2;
 	if (draw_end >= map_height)
 		draw_end = map_height - 1;
-	if (side == 'W')
-		color = 0xff0000;
-	else if (side == 'E')
-		color = 0x0000ff;
-	else if (side == 'N')
-		color = 0x00ff00;
-	else if (side == 'S')
-		color = 0x00ffff;
+	// How much to increase the texture coordinate per screen pixel
+	double step = 1.0 * 64 / line_height;
+	// Starting texture coordinate
+	double texPos = (draw_start - map_height / 2 + line_height / 2) * step;
 	painter = 0;
 	while (painter != draw_start)
-		my_pixel_put(&img_data, map_width - x - 1, painter++, 0x7f8059);
+		my_pixel_put(&img_data, map_width - x - 1, painter++, 0x4287f5);
+	
 	while (painter <= draw_end)
+	{
+		if (side == 'N')
+			color = *(get_img_pixel(&(p->tex_data[0]), tex_x, (int) texPos));
+		else if (side == 'S')
+			color = *(get_img_pixel(&(p->tex_data[1]), tex_x, (int) texPos));
+		else if (side == 'W')
+			color = *(get_img_pixel(&(p->tex_data[2]), tex_x, (int) texPos));
+		else
+			color = *(get_img_pixel(&(p->tex_data[3]), tex_x, (int) texPos));
+		texPos += step;
 		my_pixel_put(&img_data, map_width - x - 1, painter++, color);
+	}	
 	while (painter < map_height)
-		my_pixel_put(&img_data, map_width - x - 1, painter++, 0x414207);
+		my_pixel_put(&img_data, map_width - x - 1, painter++, 0x3fb821);
 }
 
 
@@ -147,7 +155,20 @@ static void	delta_calc(int x, t_player *p, int world_map[24][24])
 		perp_wall_dist = rc.side_dist_x - rc.delta_dist_x;
 	else
 		perp_wall_dist = rc.side_dist_y - rc.delta_dist_y;
-	ft_drawing((int)(map_height / perp_wall_dist), side, x, p);
+	
+	double wall_x; //where exactly the wall was hit
+	if (side == 'W' || side == 'E')
+		wall_x = p->pos_y + perp_wall_dist * rc.ray_dir_y;
+	else
+		wall_x = p->pos_x + perp_wall_dist * rc.ray_dir_x;
+	wall_x -= floor((wall_x));
+	//x coordinate on the texture
+	int tex_x = (int)(wall_x * 64.0);
+	//if((side == 'W' || side == 'E') && rc.ray_dir_x > 0) 
+	//	tex_x = 64 - tex_x - 1;
+	//if((side == 'N' || side == 'S') && rc.ray_dir_y < 0)
+	//	tex_x = 64 - tex_x - 1;
+	ft_drawing((int)(map_height / perp_wall_dist), side, x, p, tex_x);
 }
 
 void	raycaster(t_player p, int world_map[24][24])
