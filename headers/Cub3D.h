@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/08 14:36:43 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/12 11:19:23 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_camPlane
 typedef struct s_player
 {
 	void		*mlx[7];
-	
+	bool		wasd[6];
 	double		pos_x;
 	double		pos_y;
 	double		dir_x;
@@ -92,8 +92,8 @@ typedef enum	e_mlx
 t_data	handle_new_image(void *mlx_image);
 void	my_pixel_put(t_data *data, int x, int y, int color);
 unsigned int	*get_img_pixel(t_data *data, int x, int y);
-void	raycaster(t_player p, int worldMap[24][24]);
-int		handlers(int key, void *param);
+void	raycaster(t_player *p, int worldMap[24][24]);
+int		handlers(t_player *p);
 bool	collider(double pos_x, double pos_y, int worldMap[24][24]);
 
 #endif

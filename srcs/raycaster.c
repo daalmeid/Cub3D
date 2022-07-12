@@ -155,7 +155,6 @@ static void	delta_calc(int x, t_player *p, int world_map[24][24])
 		perp_wall_dist = rc.side_dist_x - rc.delta_dist_x;
 	else
 		perp_wall_dist = rc.side_dist_y - rc.delta_dist_y;
-	
 	double wall_x; //where exactly the wall was hit
 	if (side == 'W' || side == 'E')
 		wall_x = p->pos_y + perp_wall_dist * rc.ray_dir_y;
@@ -171,13 +170,13 @@ static void	delta_calc(int x, t_player *p, int world_map[24][24])
 	ft_drawing((int)(map_height / perp_wall_dist), side, x, p, tex_x);
 }
 
-void	raycaster(t_player p, int world_map[24][24])
+void	raycaster(t_player *p, int world_map[24][24])
 {
 	int	x;
 
 	x = 0;
 	while (x < map_width)
 	{
-		delta_calc(x++, &p, world_map);
+		delta_calc(x++, p, world_map);
 	}
 }

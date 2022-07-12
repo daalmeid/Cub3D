@@ -14,6 +14,13 @@
 #include "../headers/libft.h"
 #include <stdio.h>
 
+static void	esc_handler(t_player *p)
+{
+	mlx_destroy_image(p->mlx[0], p->mlx[2]);
+	mlx_destroy_window(p->mlx[0], p->mlx[1]);
+	exit(0);
+}
+
 static int	cross_handler(void *param)
 {
 	void	**mlx;
@@ -24,9 +31,47 @@ static int	cross_handler(void *param)
 	exit(0);
 }
 
+static int key_p(int key, t_player *p)
+{
+	if (key == KEY_ESC)
+		esc_handler(p);
+	else if (key == KEY_W)
+		p->wasd[0] = 1;
+	else if (key == KEY_S)
+		p->wasd[2] = 1;
+	else if (key == KEY_D)
+		p->wasd[3] = 1;
+	else if (key == KEY_A)
+		p->wasd[1] = 1;
+	else if (key == KEY_RGT_ARR)
+		p->wasd[5] = 1;
+	else if (key == KEY_LFT_ARR)
+		p->wasd[4] = 1;
+	return (0);
+}
+
+static int key_r(int key, t_player *p)
+{
+	if (key == KEY_W)
+		p->wasd[0] = 0;
+	else if (key == KEY_S)
+		p->wasd[2] = 0;
+	else if (key == KEY_D)
+		p->wasd[3] = 0;
+	else if (key == KEY_A)
+		p->wasd[1] = 0;
+	else if (key == KEY_RGT_ARR)
+		p->wasd[5] = 0;
+	else if (key == KEY_LFT_ARR)
+		p->wasd[4] = 0;
+	return (0);
+}
+
 static void	hooks(t_player *p)
 {
-	mlx_key_hook(p->mlx[1], handlers, p);
+	mlx_hook(p->mlx[1], 2, 1L<<0, key_p, p);
+	mlx_hook(p->mlx[1], 3, 1L<<1, key_r, p);
+	mlx_loop_hook(p->mlx[0], handlers, p);
 	mlx_hook(p->mlx[1], 17, 0, cross_handler, p->mlx);
 }
 
@@ -118,6 +163,7 @@ int	main(void)
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 	};
 
+	ft_memset(&p, 0, sizeof(p));
 	p.pos_x = 22;
 	p.pos_y = 12;
 	p.dir_x = -1;
@@ -127,7 +173,7 @@ int	main(void)
 	hooks(&p);
 	p.cam_plane.dir_x = 0;
 	p.cam_plane.dir_y = 0.66;
-	raycaster(p, world_map);
+	raycaster(&p, world_map);
 	mlx_put_image_to_window(p.mlx[0], p.mlx[1], p.mlx[2], 0, 0);
 	mlx_loop(p.mlx[0]);
 }

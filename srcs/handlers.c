@@ -13,14 +13,7 @@
 #include "../headers/Cub3D.h"
 #include "../headers/libft.h"
 
-static void	esc_handler(t_player *p)
-{
-	mlx_destroy_image(p->mlx[0], p->mlx[2]);
-	mlx_destroy_window(p->mlx[0], p->mlx[1]);
-	exit(0);
-}
-
-static void	rotation_handler(t_player *p, double theta, int world_map[24][24])
+static void	rotation_handler(t_player *p, double theta, int world_map[24][24], bool collision)
 {
 	double	cs;
 	double	sn;
@@ -34,25 +27,8 @@ static void	rotation_handler(t_player *p, double theta, int world_map[24][24])
 	old_dir = p->cam_plane.dir_x;
 	p->cam_plane.dir_x = p->cam_plane.dir_x * cs - p->cam_plane.dir_y * sn;
 	p->cam_plane.dir_y = old_dir * sn + p->cam_plane.dir_y * cs;
-	mlx_destroy_image(p->mlx[0], p->mlx[2]);
-	p->mlx[2] = mlx_new_image(p->mlx[0], 800, 400);
-	if (!p->mlx[2])
+	if ((!p->wasd[0] && !p->wasd[1] && !p->wasd[2] && !p->wasd[3]) || collision == false)
 	{
-		perror("Error creating image");
-		mlx_destroy_window(p->mlx[0], p->mlx[1]);
-		exit(0);
-	}
-	raycaster(*p, world_map);
-	mlx_put_image_to_window(p->mlx[0], p->mlx[1], p->mlx[2], 0, 0);
-}
-
-static void	w_handler(t_player *p, int world_map[24][24])
-{
-	if (collider(p->pos_x + p->dir_x / 3, p->pos_y + p->dir_y / 3, world_map)
-		== true)
-	{
-		p->pos_x += (p->dir_x / 3);
-		p->pos_y += (p->dir_y / 3);
 		mlx_destroy_image(p->mlx[0], p->mlx[2]);
 		p->mlx[2] = mlx_new_image(p->mlx[0], 800, 400);
 		if (!p->mlx[2])
@@ -61,20 +37,49 @@ static void	w_handler(t_player *p, int world_map[24][24])
 			mlx_destroy_window(p->mlx[0], p->mlx[1]);
 			exit(0);
 		}
-		raycaster(*p, world_map);
+		raycaster(p, world_map);
 		mlx_put_image_to_window(p->mlx[0], p->mlx[1], p->mlx[2], 0, 0);
 	}
-	else
-		printf("collision north.\n");
 }
 
-static void	s_handler(t_player *p, int world_map[24][24])
+int	wasd_handler(t_player *p, int world_map[24][24])
 {
-	if (collider(p->pos_x - p->dir_x / 3, p->pos_y - p->dir_y / 3, world_map)
-		== true)
+	double	x = 0.0;
+	double	y = 0.0;
+	bool	collision;
+	
+	if ((p->wasd[0] && p->wasd[2]) || (p->wasd[1] && p->wasd[3]))
+		return (1);
+	if (p->wasd[0])
 	{
-		p->pos_x -= (p->dir_x / 3);
-		p->pos_y -= (p->dir_y / 3);
+		x += (p->dir_x / 30);
+		y += (p->dir_y / 30);
+	}
+	if (p->wasd[1])
+	{
+		x += (p->dir_y / 30);
+		y -= (p->dir_x / 30);
+	}
+	if (p->wasd[2])
+	{
+		x -= (p->dir_x / 30);
+		y -= (p->dir_y / 30);
+	}
+	if (p->wasd[3])
+	{
+		x -= (p->dir_y / 30);
+		y += (p->dir_x / 30);
+	}
+	collision = collider(p->pos_x + x, p->pos_y + y, world_map);
+
+	if (p->wasd[5] && !p->wasd[4])
+		rotation_handler(p, 0.0075625, world_map, collision);
+	else if (p->wasd[4] && !p->wasd[5])
+		rotation_handler(p, -0.0075625, world_map, collision);
+	if (collision == true)
+	{
+		p->pos_x += x;
+		p->pos_y += y;
 		mlx_destroy_image(p->mlx[0], p->mlx[2]);
 		p->mlx[2] = mlx_new_image(p->mlx[0], 800, 400);
 		if (!p->mlx[2])
@@ -83,60 +88,16 @@ static void	s_handler(t_player *p, int world_map[24][24])
 			mlx_destroy_window(p->mlx[0], p->mlx[1]);
 			exit(0);
 		}
-		raycaster(*p, world_map);
+		raycaster(p, world_map);
 		mlx_put_image_to_window(p->mlx[0], p->mlx[1], p->mlx[2], 0, 0);
 	}
 	else
-		printf("collision south.\n");
+		printf("collision.\n");
+	return (0);
 }
 
-static void	d_handler(t_player *p, int world_map[24][24])
+int	handlers(t_player *p)
 {
-	if (collider(p->pos_x - p->dir_y / 3, p->pos_y + p->dir_x / 3, world_map)
-		== true)
-	{
-		p->pos_x -= (p->dir_y / 3);
-		p->pos_y += (p->dir_x / 3);
-		mlx_destroy_image(p->mlx[0], p->mlx[2]);
-		p->mlx[2] = mlx_new_image(p->mlx[0], 800, 400);
-		if (!p->mlx[2])
-		{
-			perror("Error creating image");
-			mlx_destroy_window(p->mlx[0], p->mlx[1]);
-			exit(0);
-		}
-		raycaster(*p, world_map);
-		mlx_put_image_to_window(p->mlx[0], p->mlx[1], p->mlx[2], 0, 0);
-	}
-	else
-		printf("collision east.\n");
-}
-
-static void	a_handler(t_player *p, int world_map[24][24])
-{
-	if (collider(p->pos_x + p->dir_y / 3, p->pos_y - p->dir_x / 3, world_map)
-		== true)
-	{
-		p->pos_x += (p->dir_y / 3);
-		p->pos_y -= (p->dir_x / 3);
-		mlx_destroy_image(p->mlx[0], p->mlx[2]);
-		p->mlx[2] = mlx_new_image(p->mlx[0], 800, 400);
-		if (!p->mlx[2])
-		{
-			perror("Error creating image");
-			mlx_destroy_window(p->mlx[0], p->mlx[1]);
-			exit(0);
-		}
-		raycaster(*p, world_map);
-		mlx_put_image_to_window(p->mlx[0], p->mlx[1], p->mlx[2], 0, 0);
-	}
-	else
-		printf("collision west.\n");
-}
-
-int	handlers(int key, void *param)
-{
-	t_player	*p;
 	int			world_map[24][24]=
 	{
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -165,20 +126,12 @@ int	handlers(int key, void *param)
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 	};
 
-	p = (t_player *)param;
-	if (key == KEY_ESC)
-		esc_handler(p);
-	else if (key == KEY_W)
-		w_handler(p, world_map);
-	else if (key == KEY_S)
-		s_handler(p, world_map);
-	else if (key == KEY_D)
-		d_handler(p, world_map);
-	else if (key == KEY_A)
-		a_handler(p, world_map);
-	else if (key == KEY_RGT_ARR)
-		rotation_handler(p, 0.075, world_map);
-	else if (key == KEY_LFT_ARR)
-		rotation_handler(p, -0.075, world_map);
+	if (p->wasd[0] || p->wasd[1] || p->wasd[2] || p->wasd[3])
+		wasd_handler(p, world_map);
+	if (p->wasd[5] && !p->wasd[4] && !p->wasd[0] && !p->wasd[1] && !p->wasd[2] && !p->wasd[3])
+		rotation_handler(p, 0.0075625, world_map, true);
+	else if (p->wasd[4] && !p->wasd[5] && !p->wasd[0] && !p->wasd[1] && !p->wasd[2] && !p->wasd[3])
+		rotation_handler(p, -0.0075625, world_map, true);
+	raycaster(p, world_map);
 	return (0);
 }
