@@ -38,7 +38,7 @@ static void	ft_drawing(int line_height, char side, int x, t_player *p, int tex_x
 	while (painter != draw_start)
 		my_pixel_put(&img_data, map_width - x - 1, painter++, 0x4287f5);
 	
-	while (painter <= draw_end)
+	while (painter < draw_end)
 	{
 		if (side == 'N')
 			color = *(get_img_pixel(&(p->tex_data[0]), tex_x, (int) texPos));
