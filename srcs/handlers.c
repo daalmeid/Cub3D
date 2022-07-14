@@ -101,14 +101,21 @@ int	handle_key_events(t_player *p, int world_map[24][24])
 	rotation_handler(p, handle_mouse(p) + (p->wasd[5] * 0.015165 - p->wasd[4] * 0.015165));
 	if (x != 0 || y != 0)
 	{
-		collision = collider(p->pos_x + x, p->pos_y + y, world_map);
+		bool x_ok = true, y_ok = true;
+		collision = collider(p->pos_x + x, p->pos_y + y, world_map, &x_ok, &y_ok);
 		if (collision == true)
 		{
 			p->pos_x += x;
 			p->pos_y += y;
 		}
 		else
-			printf("collision.\n");
+		{
+			collider(p->pos_x + x, p->pos_y, world_map, NULL, NULL);
+			if ((x_ok && !y_ok) || collider(p->pos_x + x, p->pos_y, world_map, NULL, NULL))
+				p->pos_x += x;
+			if ((y_ok && !x_ok) || collider(p->pos_x, p->pos_y + y, world_map, NULL, NULL))
+				p->pos_y += y;
+		}
 	}
 	return (0);
 }

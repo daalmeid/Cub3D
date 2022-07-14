@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/14 17:33:06 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/14 18:13:22 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	my_pixel_put(t_data *data, int x, int y, int color);
 unsigned int	*get_img_pixel(t_data *data, int x, int y);
 void	raycaster(t_player *p, int worldMap[24][24]);
 int		handlers(t_player *p);
-bool	collider(double pos_x, double pos_y, int worldMap[24][24]);
+bool	collider(double pos_x, double pos_y, int worldMap[24][24], bool *x, bool *y);
 void	ft_minimap(t_player *p, int world_map[24][24], int sign_x, int sign_y);
 int		ft_line_creation(int x, int y, t_player *p);
 

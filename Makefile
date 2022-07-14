@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/14 17:10:09 by marvin           ###   ########.fr        #
+#    Updated: 2022/07/14 18:14:50 by rafernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ libft:
 	cd libft && make
 
 $(NAME): $(OBJ) libft
-	$(CC) $(OBJ) -L../mlx_linux -lmlx_Linux  -Llibft -lft -L/usr/lib -Imlx_linux -lXext -lX11 -lm -o $(NAME)
+	$(CC) $(OBJ) -L./mlx_linux -lmlx_Linux  -Llibft -lft -L/usr/lib -Imlx_linux -lXext -lX11 -lm -o $(NAME)
 
 ################## CLEAN ###################
 
