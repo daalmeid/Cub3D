@@ -56,7 +56,7 @@ libft:
 	cd libft && make
 
 $(NAME): $(OBJ) libft
-	$(CC) $(OBJ) -L../mlx_linux -lmlx_Linux  -Llibft -lft -L/usr/lib -Imlx_linux -lXext -lX11 -lm -o $(NAME)
+	$(CC) $(OBJ) -L./mlx_linux -lmlx_Linux  -Llibft -lft -L/usr/lib -Imlx_linux -lXext -lX11 -lm -o $(NAME)
 
 ################## CLEAN ###################
 
