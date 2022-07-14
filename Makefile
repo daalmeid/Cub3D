@@ -6,7 +6,7 @@
 #    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/06 13:20:15 by marvin           ###   ########.fr        #
+#    Updated: 2022/07/14 17:10:09 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,8 @@ SRCS	=	srcs/main.c\
 			srcs/image_draw_utils.c\
 			srcs/raycaster.c\
 			srcs/handlers.c\
-			srcs/collision.c
+			srcs/collision.c\
+			srcs/minimap.c
 
 OBJ	=	$(patsubst %.c, %.o, $(SRCS))
 

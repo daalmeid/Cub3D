@@ -130,6 +130,8 @@ void	prep_tex_data(t_player *p)
 	p->tex_data[1] = handle_new_image(p->mlx[MlX_TEX_SO]);
 	p->tex_data[2] = handle_new_image(p->mlx[MlX_TEX_WE]);
 	p->tex_data[3] = handle_new_image(p->mlx[MlX_TEX_EA]);
+
+	p->map_data = handle_new_image(p->mlx[MLX_IMG_MAIN]);
 }
 
 int	main(void)
@@ -174,6 +176,8 @@ int	main(void)
 	p.cam_plane.dir_x = 0;
 	p.cam_plane.dir_y = 0.66;
 	raycaster(&p, world_map);
+	ft_minimap(&p, world_map, 1, 1);
 	mlx_put_image_to_window(p.mlx[0], p.mlx[1], p.mlx[2], 0, 0);
+	mlx_mouse_get_pos(p.mlx[0], p.mlx[1], &p.mouse_x, &p.mouse_y);
 	mlx_loop(p.mlx[0]);
 }

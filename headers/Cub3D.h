@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/13 11:29:32 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/14 17:33:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,18 @@ typedef struct s_camPlane
 	double	dir_y;
 } t_camPlane;
 
+typedef struct s_xy
+{
+	int	x;
+	int	y;
+} t_xy;
+
+typedef struct s_xy_db
+{
+	double	x;
+	double	y;
+} t_xy_db;
+
 typedef struct s_player
 {
 	void		*mlx[7];
@@ -46,10 +58,13 @@ typedef struct s_player
 	double		pos_y;
 	double		dir_x;
 	double		dir_y;
+	int			mouse_x;
+	int			mouse_y;
 
 	t_camPlane	cam_plane;
 
 	t_data		tex_data[4];
+	t_data		map_data;
 } t_player;
 
 
@@ -95,5 +110,7 @@ unsigned int	*get_img_pixel(t_data *data, int x, int y);
 void	raycaster(t_player *p, int worldMap[24][24]);
 int		handlers(t_player *p);
 bool	collider(double pos_x, double pos_y, int worldMap[24][24]);
+void	ft_minimap(t_player *p, int world_map[24][24], int sign_x, int sign_y);
+int		ft_line_creation(int x, int y, t_player *p);
 
 #endif
