@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libc3d.h"
+#include "../include/libc3d.h"
 
 double	ft_min(double a, double b)
 {

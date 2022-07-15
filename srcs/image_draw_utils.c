@@ -6,11 +6,11 @@
 /*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 13:15:14 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/15 16:19:26 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/15 21:50:01 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libc3d.h"
+#include "../include/libc3d.h"
 
 /*
 t_data	handle_new_image(void *mlx_image, char const *path)

@@ -6,7 +6,7 @@
 /*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/15 21:02:44 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/15 22:20:26 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdbool.h>
-# include "../mlx_linux/mlx.h"
-# include "libft.h"
+# include "../srcs/libmlx/mlx.h"
+# include "../srcs/libft/libft.h"
 
 typedef unsigned int uint;
 # define MAP_W 800

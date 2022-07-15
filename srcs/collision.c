@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libc3d.h"
+#include "../include/libc3d.h"
 
 bool	collider(double pos_x, double pos_y, t_v2i *r, int map[24][24])
 {

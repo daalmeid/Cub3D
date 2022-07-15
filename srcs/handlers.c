@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libc3d.h"
+#include "../include/libc3d.h"
 
 static void	rotation_handler(t_app *p, double theta)
 {

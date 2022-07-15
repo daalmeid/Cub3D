@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libc3d.h"
+#include "../include/libc3d.h"
 
 //4- Calculates lowest and highest pixel to fill in current stripe (ceiling,
 //wall and floor).
