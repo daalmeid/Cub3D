@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/Cub3D.h"
-#include "../headers/libft.h"
-#include <stdio.h>
+#include "../includes/libc3d.h"
 
 double	ft_min(double a, double b)
 {
@@ -29,7 +27,7 @@ double	ft_max(double a, double b)
 }
 
 /*Finds the b value of the y = mx + b equation.*/
-static double	get_lineb(t_xy_db const a, t_xy_db const b) {
+static double	get_lineb(t_v2d const a, t_v2d const b) {
 	
 	double	line_b;
 
@@ -43,7 +41,7 @@ static double	get_lineb(t_xy_db const a, t_xy_db const b) {
 
 /*Uses the binary space partitioning method to find if coord belongs to
 the FOV. if so, returns true.*/
-bool	bsp(t_xy_db a, t_xy_db b, t_xy_db c, t_xy_db coord)
+bool	bsp(t_v2d a, t_v2d b, t_v2d c, t_v2d coord)
 {	
 	static int	depth = 0;
 	double		line_deriv_c;
@@ -74,11 +72,11 @@ bool	bsp(t_xy_db a, t_xy_db b, t_xy_db c, t_xy_db coord)
 
 /*Runs through the coordinates where the FOV is located, by finding its max and min
 y and x value.*/
-void	fill_cone(t_xy_db player, t_xy_db lft_vert, t_xy_db rgt_vert, t_player *p)
+void	fill_cone(t_v2d player, t_v2d lft_vert, t_v2d rgt_vert, t_player *p)
 {
-	t_xy_db	min;
-	t_xy_db	max;
-	t_xy_db	coord;
+	t_v2d	min;
+	t_v2d	max;
+	t_v2d	coord;
 
 	min.x = ft_min(ft_min(player.x, lft_vert.x), rgt_vert.x);
 	min.y = ft_min(ft_min(player.y, lft_vert.y), rgt_vert.y);
@@ -104,16 +102,16 @@ void	fill_cone(t_xy_db player, t_xy_db lft_vert, t_xy_db rgt_vert, t_player *p)
 square corresponding to the player.*/
 void	ft_cone(t_player *p)
 {
-	t_xy_db	player;
-	t_xy_db	lft_vert;
-	t_xy_db	rgt_vert;
+	t_v2d	player;
+	t_v2d	lft_vert;
+	t_v2d	rgt_vert;
 
 	player.x = (double) (map_width - 70);
 	player.y = (double) (map_height - 70);
-	lft_vert.x = p->dir_x + p->cam_plane.dir_x * -1;
-	lft_vert.y = p->dir_y +  p->cam_plane.dir_y * -1;
-	rgt_vert.x = p->dir_x + p->cam_plane.dir_x * 1;
-	rgt_vert.y = p->dir_y +  p->cam_plane.dir_y * 1;
+	lft_vert.x = p->dir.x + p->plane.x * -1;
+	lft_vert.y = p->dir.y +  p->plane.y * -1;
+	rgt_vert.x = p->dir.x + p->plane.x * 1;
+	rgt_vert.y = p->dir.y +  p->plane.y * 1;
 	lft_vert.x = lft_vert.x * 12 + player.x;
 	lft_vert.y = lft_vert.y * 12 + player.y;
 	rgt_vert.x = rgt_vert.x * 12 + player.x;
@@ -134,16 +132,16 @@ void	ft_cone(t_player *p)
 	minimap.*/
 void	ft_minimap(t_player *p, int world_map[24][24], int sign_x, int sign_y)
 {
-	t_xy_db	player_xy;
-	t_xy	start;
+	t_v2d	player_xy;
+	t_v2i	start;
 
-	player_xy.x = p->pos_x;
-	player_xy.y = p->pos_y;
+	player_xy.x = p->pos.x;
+	player_xy.y = p->pos.y;
 	start.y = map_height - 70;
 	while (start.y >= map_height - 120 && start.y < map_height - 19)
 	{
 		start.x = map_width - 70;
-		player_xy.x = p->pos_x;
+		player_xy.x = p->pos.x;
 		while (start.x >= map_width - 120 && start.x < map_width - 19)
 		{
 			if (player_xy.x < 0 || player_xy.y < 0 || player_xy.x > 24 || player_xy.y > 24)

@@ -1,72 +1,65 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cub3D.h                                            :+:      :+:    :+:   */
+/*   libc3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/14 18:13:22 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/15 15:35:31 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef LIBC3D_H
+# define LIBC3D_H
 
-# include "../mlx_linux/mlx.h"
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
 # include <math.h>
 # include <stdio.h>
 # include <stdbool.h>
+# include "../mlx_linux/mlx.h"
+# include "libft.h"
 
 #define map_width 800
 #define map_height 400
 
-typedef struct s_data
+typedef struct s_img
 {
-	char	*addr;
+	void	*ptr;
+	void	*addr;
+	int		width;
+	int		height;
 	int		bpp;
 	int		line_length;
 	int		endian;
-}				t_data;
+}			t_img;
 
-typedef struct s_camPlane
-{
-	double	dir_x;
-	double	dir_y;
-} t_camPlane;
-
-typedef struct s_xy
+typedef struct s_v2i
 {
 	int	x;
 	int	y;
-} t_xy;
+}	t_v2i;
 
-typedef struct s_xy_db
+typedef struct s_v2d
 {
 	double	x;
 	double	y;
-} t_xy_db;
+}	t_v2d;
 
 typedef struct s_player
 {
-	void		*mlx[7];
-	bool		wasd[6];
-	double		pos_x;
-	double		pos_y;
-	double		dir_x;
-	double		dir_y;
-	int			mouse_x;
-	int			mouse_y;
+	void	*mlx[2];
+	bool	wasd[6];
+	t_v2d	pos;
+	t_v2d	dir;
+	t_v2i	mouse;
+	t_v2d	plane;
 
-	t_camPlane	cam_plane;
-
-	t_data		tex_data[4];
-	t_data		map_data;
+	t_img		tex[4];
+	t_img		map_data;
 } t_player;
-
 
 typedef struct s_raycast
 {
@@ -98,15 +91,18 @@ typedef enum	e_mlx
 	MLX_INIT = 0,
 	MLX_WINDOW = 1,
 	MLX_IMG_MAIN = 2,
+	/*
 	MlX_TEX_NO = 3,
 	MlX_TEX_SO = 4,
 	MlX_TEX_WE = 5,
 	MlX_TEX_EA = 6
+	*/
 } t_mlx;
 
-t_data	handle_new_image(void *mlx_image);
-void	my_pixel_put(t_data *data, int x, int y, int color);
-unsigned int	*get_img_pixel(t_data *data, int x, int y);
+
+bool	handle_new_image(t_img *dst, void *mlx, char const *path);
+void	my_pixel_put(t_img *data, int x, int y, int color);
+unsigned int	*get_img_pixel(t_img *data, int x, int y);
 void	raycaster(t_player *p, int worldMap[24][24]);
 int		handlers(t_player *p);
 bool	collider(double pos_x, double pos_y, int worldMap[24][24], bool *x, bool *y);
