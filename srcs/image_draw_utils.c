@@ -6,7 +6,7 @@
 /*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 13:15:14 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/15 15:28:58 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/15 16:19:26 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ t_data	handle_new_image(void *mlx_image, char const *path)
 }
 */
 
-bool	handle_new_image(t_img *dst, void *mlx, char const *path)
+bool	handle_new_image(t_img *dst, void *mlx)
 {
-	dst->ptr = mlx_xpm_file_to_image(mlx, (char *)path, &dst->width, &dst->height);
+	dst->ptr = mlx_xpm_file_to_image(mlx, dst->path, &dst->width, &dst->height);
 	if (!dst->ptr)
 		return (false);
 	dst->addr = mlx_get_data_addr(dst->ptr, &dst->bpp,
