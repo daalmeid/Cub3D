@@ -12,23 +12,21 @@
 
 #include "../includes/libc3d.h"
 
-static void	esc_handler(t_player *p)
+static int	esc_handler(t_player *p)
 {
-	mlx_destroy_image(p->mlx[0], p->map_data.addr);
+	mlx_destroy_image(p->mlx[0], p->map_data.ptr);
+	mlx_destroy_window(p->mlx[0], p->mlx[1]);
+	exit(0);
+	return (0);
+}
+/*
+static int	cross_handler(t_player *p)
+{;
+	mlx_destroy_image(p->mlx[0], p->map_data.ptr);
 	mlx_destroy_window(p->mlx[0], p->mlx[1]);
 	exit(0);
 }
-
-static int	cross_handler(void *param)
-{
-	void	**mlx;
-
-	mlx = (void **) param;
-	mlx_destroy_image(mlx[0], mlx[2]);
-	mlx_destroy_window(mlx[0], mlx[1]);
-	exit(0);
-}
-
+*/
 static int key_p(int key, t_player *p)
 {
 	if (key == KEY_ESC)
@@ -70,7 +68,7 @@ static void	hooks(t_player *p)
 	mlx_hook(p->mlx[1], 2, 1L<<0, key_p, p);
 	mlx_hook(p->mlx[1], 3, 1L<<1, key_r, p);
 	mlx_loop_hook(p->mlx[0], handlers, p);
-	mlx_hook(p->mlx[1], 17, 0, cross_handler, p->mlx);
+	mlx_hook(p->mlx[1], 17, 0, esc_handler, p->mlx);
 }
 
 static void	prep_ptrs(void **mlx)
