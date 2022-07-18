@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   image_draw_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 13:15:14 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/15 21:50:01 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/18 13:25:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libc3d.h"
-
-/*
-t_data	handle_new_image(void *mlx_image, char const *path)
-{
-	t_data	data;
-
-	data.addr = mlx_get_data_addr(mlx_image, &data.bpp,
-			&data.line_length, &data.endian);
-	return (data);
-}
-*/
 
 bool	handle_new_image(t_img *dst, void *mlx)
 {

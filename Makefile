@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/15 22:27:00 by rafernan         ###   ########.fr        #
+#    Updated: 2022/07/18 17:14:48 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,11 @@ SRCS_	=	main.c\
 			raycaster.c\
 			handlers.c\
 			collision.c\
-			minimap.c
+			minimap.c\
+			fov_minimap.c\
+			hooks.c\
+			rc_painter.c\
+			rc_hit_find.c
 SRCS	=	$(addprefix $(_SRC), $(SRCS_))
 OBJS	=	$(patsubst $(_SRC)%.c, $(_OBJ)%.o, $(SRCS))
 

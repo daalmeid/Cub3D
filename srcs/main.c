@@ -12,65 +12,6 @@
 
 #include "../include/libc3d.h"
 
-static int	esc_handler(t_app *p)
-{
-	mlx_destroy_image(p->mlx.ptr, p->mlx.data.ptr);
-	mlx_destroy_window(p->mlx.ptr, p->mlx.win);
-	exit(0);
-	return (0);
-}
-/*
-static int	cross_handler(t_app *p)
-{;
-	mlx_destroy_image(p->mlx.ptr, p->mlx.data.ptr);
-	mlx_destroy_window(p->mlx.ptr, p->mlx.win);
-	exit(0);
-}
-*/
-static int key_p(int key, t_app *p)
-{
-	if (key == KEY_ESC)
-		esc_handler(p);
-	else if (key == KEY_W)
-		p->kmap[_W] = true;
-	else if (key == KEY_S)
-		p->kmap[_S] = true;
-	else if (key == KEY_D)
-		p->kmap[_D] = true;
-	else if (key == KEY_A)
-		p->kmap[_A] = true;
-	else if (key == KEY_RGT_ARR)
-		p->kmap[_RA] = true;
-	else if (key == KEY_LFT_ARR)
-		p->kmap[_LA] = true;
-	return (0);
-}
-
-static int key_r(int key, t_app *p)
-{
-	if (key == KEY_W)
-		p->kmap[_W] = false;
-	else if (key == KEY_S)
-		p->kmap[_S] = false;
-	else if (key == KEY_D)
-		p->kmap[_D] = false;
-	else if (key == KEY_A)
-		p->kmap[_A] = false;
-	else if (key == KEY_RGT_ARR)
-		p->kmap[_RA] = false;
-	else if (key == KEY_LFT_ARR)
-		p->kmap[_LA] = false;
-	return (0);
-}
-
-static void	hooks(t_app *p)
-{
-	mlx_hook(p->mlx.win, 2, 1L<<0, key_p, p);
-	mlx_hook(p->mlx.win, 3, 1L<<1, key_r, p);
-	mlx_loop_hook(p->mlx.ptr, handlers, p);
-	mlx_hook(p->mlx.win, 17, 0, esc_handler, p);
-}
-
 static void	prep_ptrs(t_mlx *mlx)
 {	
 	mlx->ptr = mlx_init();
@@ -92,7 +33,7 @@ static void	prep_ptrs(t_mlx *mlx)
 		exit(0);
 	}
 	mlx->data.addr = mlx_get_data_addr(mlx->data.ptr, &mlx->data.bpp,
-		&mlx->data.line_length, &mlx->data.endian);
+			&mlx->data.line_length, &mlx->data.endian);
 	mlx->data.width = MAP_W;
 	mlx->data.height = MAP_H;
 }

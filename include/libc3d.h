@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libc3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/15 22:20:26 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/18 17:11:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 typedef unsigned int uint;
 # define MAP_W 800
 # define MAP_H 400
+# define MMAP_CTR_X (MAP_W - 70)
+# define MMAP_CTR_Y (MAP_H - 70)
 
 /* MAP KEYS */
 enum
@@ -109,6 +111,14 @@ typedef struct s_raycast
 	t_v2i	map;
 } t_raycast;
 
+typedef struct s_tex_rc_info
+{
+	char	side;
+	int		x;
+	double	step; // How much to increase the texture coordinate per screen pixel
+	double	pos; // Starting texture coordinate
+} t_tex_rc_info;
+
 bool		handle_new_image(t_img *dst, void *mlx);
 void		my_pixel_put(t_img *data, int x, int y, int color);
 uint		*get_img_pixel(t_img *data, int x, int y);
@@ -116,6 +126,10 @@ void		raycaster(t_app *p, int map[24][24]);
 int			handlers(t_app *p);
 bool		collider(double pos_x, double pos_y, t_v2i *r, int map[24][24]);
 void		ft_minimap(t_app *p, int map[24][24], int sign_x, int sign_y);
-int			ft_line_creation(int x, int y, t_app *p);
+void		fill_cone(t_v2d player, t_v2d lft_vert, t_v2d rgt_vert, t_app *p);
+void		hooks(t_app *p);
+void		ft_drawing(int line_height, t_tex_rc_info tex, int x, t_app *p);
+char		hit_find(t_raycast *rc, int map[24][24]);
+int			get_tex_x(char side, t_raycast rc, t_app *p, double *perp_wall_dist);
 
 #endif
