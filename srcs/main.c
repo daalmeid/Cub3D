@@ -10,174 +10,135 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/Cub3D.h"
-#include "../headers/libft.h"
-#include <stdio.h>
+#include "../include/libc3d.h"
 
-static void	esc_handler(t_player *p)
+static int	esc_handler(t_app *p)
 {
-	mlx_destroy_image(p->mlx[0], p->mlx[2]);
-	mlx_destroy_window(p->mlx[0], p->mlx[1]);
+	mlx_destroy_image(p->mlx.ptr, p->mlx.data.ptr);
+	mlx_destroy_window(p->mlx.ptr, p->mlx.win);
+	exit(0);
+	return (0);
+}
+/*
+static int	cross_handler(t_app *p)
+{;
+	mlx_destroy_image(p->mlx.ptr, p->mlx.data.ptr);
+	mlx_destroy_window(p->mlx.ptr, p->mlx.win);
 	exit(0);
 }
-
-static int	cross_handler(void *param)
-{
-	void	**mlx;
-
-	mlx = (void **) param;
-	mlx_destroy_image(mlx[0], mlx[2]);
-	mlx_destroy_window(mlx[0], mlx[1]);
-	exit(0);
-}
-
-static int key_p(int key, t_player *p)
+*/
+static int key_p(int key, t_app *p)
 {
 	if (key == KEY_ESC)
 		esc_handler(p);
 	else if (key == KEY_W)
-		p->wasd[0] = 1;
+		p->kmap[_W] = true;
 	else if (key == KEY_S)
-		p->wasd[2] = 1;
+		p->kmap[_S] = true;
 	else if (key == KEY_D)
-		p->wasd[3] = 1;
+		p->kmap[_D] = true;
 	else if (key == KEY_A)
-		p->wasd[1] = 1;
+		p->kmap[_A] = true;
 	else if (key == KEY_RGT_ARR)
-		p->wasd[5] = 1;
+		p->kmap[_RA] = true;
 	else if (key == KEY_LFT_ARR)
-		p->wasd[4] = 1;
+		p->kmap[_LA] = true;
 	return (0);
 }
 
-static int key_r(int key, t_player *p)
+static int key_r(int key, t_app *p)
 {
 	if (key == KEY_W)
-		p->wasd[0] = 0;
+		p->kmap[_W] = false;
 	else if (key == KEY_S)
-		p->wasd[2] = 0;
+		p->kmap[_S] = false;
 	else if (key == KEY_D)
-		p->wasd[3] = 0;
+		p->kmap[_D] = false;
 	else if (key == KEY_A)
-		p->wasd[1] = 0;
+		p->kmap[_A] = false;
 	else if (key == KEY_RGT_ARR)
-		p->wasd[5] = 0;
+		p->kmap[_RA] = false;
 	else if (key == KEY_LFT_ARR)
-		p->wasd[4] = 0;
+		p->kmap[_LA] = false;
 	return (0);
 }
 
-static void	hooks(t_player *p)
+static void	hooks(t_app *p)
 {
-	mlx_hook(p->mlx[1], 2, 1L<<0, key_p, p);
-	mlx_hook(p->mlx[1], 3, 1L<<1, key_r, p);
-	mlx_loop_hook(p->mlx[0], handlers, p);
-	mlx_hook(p->mlx[1], 17, 0, cross_handler, p->mlx);
+	mlx_hook(p->mlx.win, 2, 1L<<0, key_p, p);
+	mlx_hook(p->mlx.win, 3, 1L<<1, key_r, p);
+	mlx_loop_hook(p->mlx.ptr, handlers, p);
+	mlx_hook(p->mlx.win, 17, 0, esc_handler, p);
 }
 
-static void	prep_ptrs(void **mlx)
-{
-	int	tex_size;
-	
-	tex_size = 64;
-	mlx[MLX_INIT] = mlx_init();
-	if (!mlx[MLX_INIT])
+static void	prep_ptrs(t_mlx *mlx)
+{	
+	mlx->ptr = mlx_init();
+	if (!mlx->ptr)
 	{
 		perror("Error establishing connection to graphical system");
 		exit(0);
 	}
-	mlx[MLX_WINDOW] = mlx_new_window(mlx[MLX_INIT], 800, 400, "Cub3D");
-	if (!mlx[MLX_WINDOW])
+	mlx->win = mlx_new_window(mlx->ptr, MAP_W, MAP_H, "Cub3D");
+	if (!mlx->win)
 	{
 		perror("Error creating window");
 		exit(0);
 	}
-	mlx[MLX_IMG_MAIN] = mlx_new_image(mlx[MLX_INIT], 800, 400);
-	if (!mlx[MLX_IMG_MAIN])
+	mlx->data.ptr = mlx_new_image(mlx->ptr, MAP_W, MAP_H);
+	if (!mlx->data.ptr)
 	{
 		perror("Error creating image");
 		exit(0);
 	}
-	mlx[MlX_TEX_NO] =  mlx_xpm_file_to_image(mlx[MLX_INIT], "pics/mossy.xpm", &tex_size, &tex_size);
-	if (!mlx[MlX_TEX_NO])
-	{
-		perror("Error creating image");
-		exit(0);
-	}
-	mlx[MlX_TEX_SO] =  mlx_xpm_file_to_image(mlx[MLX_INIT], "pics/eagle.xpm", &tex_size, &tex_size);
-	if (!mlx[MlX_TEX_SO])
-	{
-		perror("Error creating image");
-		exit(0);
-	}
-	mlx[MlX_TEX_WE] =  mlx_xpm_file_to_image(mlx[MLX_INIT], "pics/purplestone.xpm", &tex_size, &tex_size);
-	if (!mlx[MlX_TEX_WE])
-	{
-		perror("Error creating image");
-		exit(0);
-	}
-	mlx[MlX_TEX_EA] =  mlx_xpm_file_to_image(mlx[MLX_INIT], "pics/redbrick.xpm", &tex_size, &tex_size);
-	if (!mlx[MlX_TEX_EA])
-	{
-		perror("Error creating image");
-		exit(0);
-	}
+	mlx->data.addr = mlx_get_data_addr(mlx->data.ptr, &mlx->data.bpp,
+		&mlx->data.line_length, &mlx->data.endian);
+	mlx->data.width = MAP_W;
+	mlx->data.height = MAP_H;
 }
 
-void	prep_tex_data(t_player *p)
+void	prep_tex_data(t_app *p)
 {
-	p->tex_data[0] = handle_new_image(p->mlx[MlX_TEX_NO]);
-	p->tex_data[1] = handle_new_image(p->mlx[MlX_TEX_SO]);
-	p->tex_data[2] = handle_new_image(p->mlx[MlX_TEX_WE]);
-	p->tex_data[3] = handle_new_image(p->mlx[MlX_TEX_EA]);
-
-	p->map_data = handle_new_image(p->mlx[MLX_IMG_MAIN]);
+	p->tex[0].path = "content/mossy.xpm";
+	if (!handle_new_image(&p->tex[0], p->mlx.ptr))
+	{
+		printf("Failed to load image\n");
+		exit (2);
+	}
+	p->tex[1].path = "content/eagle.xpm";
+	if (!handle_new_image(&p->tex[1], p->mlx.ptr))
+	{
+		printf("Failed to load image\n");
+		exit (2);
+	}
+	p->tex[2].path = "content/purplestone.xpm";
+	if (!handle_new_image(&p->tex[2], p->mlx.ptr))
+	{
+		printf("Failed to load image\n");
+		exit (2);
+	}
+	p->tex[3].path = "content/redbrick.xpm";
+	if (!handle_new_image(&p->tex[3], p->mlx.ptr))
+	{
+		printf("Failed to load image\n");
+		exit (2);
+	}
 }
 
 int	main(void)
 {
-	t_player	p;
-	int			world_map[24][24]=
-	{
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-	};
+	t_app	p;
 
 	ft_memset(&p, 0, sizeof(p));
-	p.pos_x = 22;
-	p.pos_y = 12;
-	p.dir_x = -1;
-	p.dir_y = 0;
-	prep_ptrs(p.mlx);
+	p.pos.x = 22;
+	p.pos.y = 12;
+	p.dir.x = -1;
+	p.dir.y = 0;
+	p.plane.x = 0;
+	p.plane.y = 0.66;
+	prep_ptrs(&p.mlx);
 	prep_tex_data(&p);
 	hooks(&p);
-	p.cam_plane.dir_x = 0;
-	p.cam_plane.dir_y = 0.66;
-	raycaster(&p, world_map);
-	ft_minimap(&p, world_map, 1, 1);
-	mlx_put_image_to_window(p.mlx[0], p.mlx[1], p.mlx[2], 0, 0);
-	mlx_mouse_get_pos(p.mlx[0], p.mlx[1], &p.mouse_x, &p.mouse_y);
-	mlx_loop(p.mlx[0]);
+	mlx_mouse_get_pos(p.mlx.ptr, p.mlx.win, &p.mouse.x, &p.mouse.y);
+	mlx_loop(p.mlx.ptr);
 }

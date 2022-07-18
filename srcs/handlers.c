@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/Cub3D.h"
-#include "../headers/libft.h"
+#include "../include/libc3d.h"
 
-static void	rotation_handler(t_player *p, double theta)
+static void	rotation_handler(t_app *p, double theta)
 {
 	double	cs;
 	double	sn;
@@ -23,15 +22,15 @@ static void	rotation_handler(t_player *p, double theta)
 		return ;
 	cs = cos(theta);
 	sn = sin(theta);
-	old_dir = p->dir_x;
-	p->dir_x = p->dir_x * cs - p->dir_y * sn;
-	p->dir_y = old_dir * sn + p->dir_y * cs;
-	old_dir = p->cam_plane.dir_x;
-	p->cam_plane.dir_x = p->cam_plane.dir_x * cs - p->cam_plane.dir_y * sn;
-	p->cam_plane.dir_y = old_dir * sn + p->cam_plane.dir_y * cs;
+	old_dir = p->dir.x;
+	p->dir.x = p->dir.x * cs - p->dir.y * sn;
+	p->dir.y = old_dir * sn + p->dir.y * cs;
+	old_dir = p->plane.x;
+	p->plane.x = p->plane.x * cs - p->plane.y * sn;
+	p->plane.y = old_dir * sn + p->plane.y * cs;
 }
 
-static double handle_mouse(t_player *p)
+static double handle_mouse(t_app *p)
 {
 	// CONST VALUES
 	const double sensivity = 1.0;
@@ -42,110 +41,104 @@ static double handle_mouse(t_player *p)
 	double mouse_x = 0.0;
 	double reset_x = 0.0;
 
-	mlx_mouse_get_pos(p->mlx[0], p->mlx[1], &x, &y);
-	(void)y;
-
-	// ignore mouse movement outside of window
-    if (x < 0 || x > map_width || y > map_height || y < 0 || p->mouse_x == x)
-    {
-        p->mouse_x = -1;
-        p->mouse_y = -1;
-        return (0);
-    }
-    // when mouse going back to window reset latest position
-    if (p->mouse_x == -1 || p->mouse_y == -1)
-    {
-        p->mouse_x = x;
-        p->mouse_y = y;
-        return (0);
-    } 
-
-	if (p->mouse_x - x > 0) // left
+	mlx_mouse_get_pos(p->mlx.ptr, p->mlx.win, &x, &y);
+	if (x < 0 || x > MAP_W || y > MAP_H || y < 0 || p->mouse.x == x)
 	{
-		// increase speed relative of to the left edge
-		off_x = (double)(map_width - x) / 1024 * accelaration;
-		// calculate speed
-		mouse_x = -((double)(p->mouse_x - x) * off_x) / 64 * sensivity;
+		p->mouse.x = -1;
+		p->mouse.y = -1;
+		return (0);
 	}
-	else if (p->mouse_x - x < 0) // right
+	if (p->mouse.x == -1 || p->mouse.y == -1)
 	{
-		// increase speed relative to the right edge
+		p->mouse.x = x;
+		p->mouse.y = y;
+		return (0);
+	}
+	if (p->mouse.x - x > 0)
+	{
+		off_x = (double)(MAP_W - x) / 1024 * accelaration;
+		mouse_x = -((double)(p->mouse.x - x) * off_x) / 64 * sensivity;
+	}
+	else if (p->mouse.x - x < 0)
+	{
 		off_x = (double)x / 1024 * accelaration;
-		// calculate speed
-		mouse_x = ((double)-(p->mouse_x - x) * off_x) / 64 * sensivity;
+		mouse_x = ((double)-(p->mouse.x - x) * off_x) / 64 * sensivity;
 	}
-	// allow minimun movement when returning mouse
-	reset_x = 0.002 * sensivity * off_x;
-	if (x < (map_width / 2.5) && x > p->mouse_x && mouse_x > reset_x)
+	reset_x = 0.01 * sensivity * off_x;
+	if (x < (MAP_W / 2.5) && x > p->mouse.x && mouse_x > reset_x)
 		mouse_x = reset_x;
-	else if (x > (map_width - map_width / 2.5) && x < p->mouse_x && mouse_x < -reset_x)
+	else if (x > (MAP_W - MAP_W / 2.5) && x < p->mouse.x && mouse_x < -reset_x)
 		mouse_x = -reset_x;
-	// limit the maximum speed
-	if (mouse_x > 2.0)
-		mouse_x = 2.0;
-	// save current positon
-	p->mouse_x = x;
+	if (mouse_x > 1.0)
+		mouse_x = 1.0;
+	else if (mouse_x < -1.0)
+		mouse_x = -1.0;
+	p->mouse.x = x;
 	return (mouse_x);
 }
 
-int	handle_key_events(t_player *p, int world_map[24][24])
+int	handle_key_events(t_app *p, int map[24][24])
 {
-	double	x = 0.0;
-	double	y = 0.0;
-	bool	collision;
-	
-	x = ((p->dir_x * p->wasd[0]) + (p->dir_y * p->wasd[1])
-		- (p->dir_x * p->wasd[2]) - (p->dir_y * p->wasd[3])) / 30;
-	y = ((p->dir_y * p->wasd[0]) - (p->dir_x * p->wasd[1])
-		- (p->dir_y * p->wasd[2]) + (p->dir_x) * p->wasd[3]) / 30;
-	rotation_handler(p, handle_mouse(p) + (p->wasd[5] * 0.015165 - p->wasd[4] * 0.015165));
-	if (x != 0 || y != 0)
+	t_v2d	v;
+	t_v2i	r;
+
+	v.x = ((p->dir.x * p->kmap[_W]) + (p->dir.y * p->kmap[_A])
+		- (p->dir.x * p->kmap[_S]) - (p->dir.y * p->kmap[_D])) / 30;
+	v.y = ((p->dir.y * p->kmap[_W]) - (p->dir.x * p->kmap[_A])
+		- (p->dir.y * p->kmap[_S]) + (p->dir.x) * p->kmap[_D]) / 30;
+	rotation_handler(p, handle_mouse(p) + (p->kmap[_RA] * 0.015165 - p->kmap[_LA] * 0.015165));
+	if (v.x != 0 || v.y != 0)
 	{
-		collision = collider(p->pos_x + x, p->pos_y + y, world_map);
-		if (collision == true)
+		r.x = true;
+		r.y = true;
+		if (collider(p->pos.x + v.x, p->pos.y + v.y, &r, map))
 		{
-			p->pos_x += x;
-			p->pos_y += y;
+			p->pos.x += v.x;
+			p->pos.y += v.y;
 		}
 		else
-			printf("collision.\n");
+		{
+			if ((r.x && !r.y) || collider(p->pos.x + v.x, p->pos.y, NULL, map))
+				p->pos.x += v.x;
+			if ((!r.x && r.y) || collider(p->pos.x, p->pos.y + v.y, NULL, map))
+				p->pos.y += v.y;
+		}
 	}
 	return (0);
 }
 
-int	handlers(t_player *p)
+int	handlers(t_app *p)
 {
-	int			world_map[24][24]=
-	{
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+	int map[24][24] = {
+		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+		{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1},
+		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 	};
 
-	handle_key_events(p, world_map);	
-	raycaster(p, world_map);
-	ft_minimap(p, world_map, 1, 1);
-	mlx_put_image_to_window(p->mlx[0], p->mlx[1], p->mlx[2], 0, 0);
+	handle_key_events(p, map);
+	raycaster(p, map);
+	ft_minimap(p, map, 1, 1);
+	mlx_put_image_to_window(p->mlx.ptr, p->mlx.win, p->mlx.data.ptr, 0, 0);
 	return (0);
 }

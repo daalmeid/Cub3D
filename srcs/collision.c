@@ -10,29 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/Cub3D.h"
-#include "../headers/libft.h"
+#include "../include/libc3d.h"
 
-bool	collider(double pos_x, double pos_y, int world_map[24][24])
+bool	collider(double pos_x, double pos_y, t_v2i *r, int map[24][24])
 {
-	double	theta;
-	double	v_x;
-	double	v_y;
+	t_v2d	v;
 	double	old_dir;
+	bool	no_col;
+	double	theta;
 
+	no_col = true;
 	theta = 0.05;
-	v_x = 0.2;
-	v_y = 0;
-	if (world_map[(int)(pos_y + v_y)][(int)(pos_x + v_x)] == 1)
-		return (false);
+	v.x = 0.2;
+	v.y = 0;
 	while (theta < 6.25) //~360 degrees in radians
 	{
-		old_dir = v_x;
-		v_x = v_x * cos(theta) - v_y * sin(theta);
-		v_y = old_dir * sin(theta) + v_y * cos(theta);
-		if (world_map[(int)(pos_y + v_y)][(int)(pos_x + v_x)] == 1)
+		old_dir = v.x;
+		v.x = v.x * cos(theta) - v.y * sin(theta);
+		v.y = old_dir * sin(theta) + v.y * cos(theta);
+		if (r && map[(int)(pos_y)][(int)(pos_x + v.x)] == 1)
+			r->x = false;
+		if (r && map[(int)(pos_y + v.y)][(int)(pos_x)] == 1)
+			r->y = false;
+		if (map[(int)(pos_y + v.y)][(int)(pos_x + v.x)] == 1)
+			no_col = false;
+		// if nothing works might as well stop calculating to save cpu cycles
+		if (no_col == false && (!r || r->x == false) && (!r || r->y == false))
 			return (false);
-		theta += 0.05;
+		theta += 0.01;
 	}
-	return (true);
+	return (no_col);
 }

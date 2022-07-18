@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/14 17:10:09 by marvin           ###   ########.fr        #
+#    Updated: 2022/07/15 22:27:00 by rafernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ################## Program #################
 
-NAME = Cub3D
+NAME	=		Cub3D
 
 ################## COLORS ##################
 
@@ -23,51 +23,67 @@ NAME = Cub3D
 ################## TERMINAL ################
 
 RM		=		rm -f
+MAKE	+=		-s
 
 ################## COMPILER ################
 
 CC		=		cc
-CFLAGS	=		-Wall -Werror -Wextra
+CFLAGS	=		-Wall -Werror -Wextra -O3
 
 ################## FILES ###################
 
-SRCS	=	srcs/main.c\
-			srcs/image_draw_utils.c\
-			srcs/raycaster.c\
-			srcs/handlers.c\
-			srcs/collision.c\
-			srcs/minimap.c
+_OBJ	=	./objs/
+_SRC	=	./srcs/
 
-OBJ	=	$(patsubst %.c, %.o, $(SRCS))
+SRCS_	=	main.c\
+			image_draw_utils.c\
+			raycaster.c\
+			handlers.c\
+			collision.c\
+			minimap.c
+SRCS	=	$(addprefix $(_SRC), $(SRCS_))
+OBJS	=	$(patsubst $(_SRC)%.c, $(_OBJ)%.o, $(SRCS))
 
-%.o: %.c
-	$(CC) -Wall -Wextra -Werror -I/usr/include -Imlx_linux -O3 -c $< -o $@
+DEPS	=	srcs/libmlx/libmlx_Linux.a srcs/libft/libft.a
 
-#LIB_DIR	=	-L./libft -L/usr/local/lib/
-#LIBS	=	-lft -lmlx
-#FRMWRKS	=	-framework OpenGL -framework AppKit
+LDFLAGS	=	-lmlx -lft -lXext -lX11 -lm
 
+LDLIBS_	=	./srcs/libmlx ./srcs/libft /usr/lib
+LDLIBS	=	$(addprefix -L , $(LDLIBS_))
+
+INCS_	=	./include/ /usr/include ./src/libmlx ./src/libft
+INCS	=	$(addprefix -I, $(INCS_))
 
 ################## RULES ###################
 
 all: $(NAME)
 
-libft:
-	cd libft && make
+$(NAME): $(DEPS) $(_OBJ) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(INCS) $(LDLIBS) $(LDFLAGS) -o $(NAME)
 
-$(NAME): $(OBJ) libft
-	$(CC) $(OBJ) -L./mlx_linux -lmlx_Linux  -Llibft -lft -L/usr/lib -Imlx_linux -lXext -lX11 -lm -o $(NAME)
+$(_OBJ)%.o: $(_SRC)%.c
+	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+
+srcs/libmlx/libmlx_Linux.a:
+	$(MAKE) -C $(dir $@)
+
+srcs/libft/libft.a: $(shell make -C ./srcs/libft/ -q libft.a || echo force)
+	$(MAKE) $(notdir $@) -C $(dir $@)
+
+$(_OBJ):
+	mkdir $@
 
 ################## CLEAN ###################
 
 clean:
-	cd libft && make clean
-	$(RM) $(OBJ)
+	$(RM) -r $(_OBJ)
+	$(MAKE) clean -C srcs/libmlx/
+	$(MAKE) clean -C srcs/libft/
 
 fclean: clean
-	cd libft && make fclean
+	$(MAKE) fclean -C srcs/libft/
 	$(RM) $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re force
