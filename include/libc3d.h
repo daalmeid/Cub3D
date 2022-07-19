@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/18 17:11:28 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/19 11:09:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef unsigned int uint;
 # define MAP_H 400
 # define MMAP_CTR_X (MAP_W - 70)
 # define MMAP_CTR_Y (MAP_H - 70)
+# define SENSITIVITY 1.0
+# define ACCELERATION 1.5
 
 /* MAP KEYS */
 enum
@@ -124,7 +126,7 @@ void		my_pixel_put(t_img *data, int x, int y, int color);
 uint		*get_img_pixel(t_img *data, int x, int y);
 void		raycaster(t_app *p, int map[24][24]);
 int			handlers(t_app *p);
-bool		collider(double pos_x, double pos_y, t_v2i *r, int map[24][24]);
+void		collision_behaviour(t_app *p, int map[24][24], t_v2d v);
 void		ft_minimap(t_app *p, int map[24][24], int sign_x, int sign_y);
 void		fill_cone(t_v2d player, t_v2d lft_vert, t_v2d rgt_vert, t_app *p);
 void		hooks(t_app *p);

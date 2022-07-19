@@ -41,3 +41,23 @@ bool	collider(double pos_x, double pos_y, t_v2i *r, int map[24][24])
 	}
 	return (no_col);
 }
+
+void	collision_behaviour(t_app *p, int map[24][24], t_v2d v)
+{
+	t_v2i	r;
+
+	r.x = true;
+	r.y = true;
+	if (collider(p->pos.x + v.x, p->pos.y + v.y, &r, map))
+	{
+		p->pos.x += v.x;
+		p->pos.y += v.y;
+	}
+	else
+	{
+		if ((r.x && !r.y) || collider(p->pos.x + v.x, p->pos.y, NULL, map))
+			p->pos.x += v.x;
+		if ((!r.x && r.y) || collider(p->pos.x, p->pos.y + v.y, NULL, map))
+			p->pos.y += v.y;
+	}
+}
