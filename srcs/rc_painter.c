@@ -15,7 +15,7 @@
 /*7- Gets the correct color from the base texture to put on our image*/
 static void	wall_painter(int painter, int x, t_tex_rc_info *tex, t_app *p)
 {
-	int		color;
+	int	color;
 
 	if (tex->side == 'N')
 		color = *(get_img_pixel(&(p->tex[0]), tex->x, (int) tex->pos));
@@ -26,6 +26,10 @@ static void	wall_painter(int painter, int x, t_tex_rc_info *tex, t_app *p)
 	else
 		color = *(get_img_pixel(&(p->tex[3]), tex->x, (int) tex->pos));
 	tex->pos += tex->step;
+	if (tex->side == 'N' || tex->side == 'S')
+		color = (int)((color & 0x0000FF) * 0.70)
+			| (int)(((color >> 8) & 0x0000FF) * 0.70) << 8
+			| (int)((color >> 16) * 0.70) << 16;
 	my_pixel_put(&p->mlx.data, MAP_W - x - 1, painter, color);
 }
 
