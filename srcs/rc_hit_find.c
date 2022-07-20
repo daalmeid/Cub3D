@@ -59,7 +59,7 @@ static char	get_final_side(char side, t_v2d ray_dir)
 
 /*3-Checks for a wall hit and which side was hit, while also adding
 to the distance the ray crossed and returns the side hit.*/
-char	hit_find(t_raycast *rc, int map[24][24])
+char	hit_find(t_raycast *rc, char **map)
 {
 	int		hit;
 	char	side;
@@ -80,7 +80,7 @@ char	hit_find(t_raycast *rc, int map[24][24])
 			rc->side_dist.y += rc->delta_dist.y;
 			side = 'x';
 		}
-		if (map[rc->map.y][rc->map.x] == 1)
+		if (map[rc->map.y][rc->map.x] == '1')
 			hit = 1;
 	}
 	return (get_final_side(side, (rc->ray_dir)));

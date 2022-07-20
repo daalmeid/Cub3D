@@ -40,10 +40,10 @@ void	ft_cone(t_app *p)
 	my_pixel_put(&p->mlx.data, MAP_W - 69, MAP_H - 71, CLR_P);
 	my_pixel_put(&p->mlx.data, MAP_W - 69, MAP_H - 70, CLR_P);
 	my_pixel_put(&p->mlx.data, MAP_W - 69, MAP_H - 69, CLR_P);
-	// mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 30, MAP_H - 65, CLR_D, "E");
-	// mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 115, MAP_H - 65, CLR_D, "W");
-	// mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 70, MAP_H - 105, CLR_D, "N");
-	// mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 70, MAP_H - 25, CLR_D, "S");
+	mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 30, MAP_H - 65, 0, "E");
+	mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 115, MAP_H - 65, 0, "W");
+	mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 70, MAP_H - 105, 0, "N");
+	mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 70, MAP_H - 25, 0, "S");
 }
 
 /*Creates a circular version of the minimap*/
@@ -60,16 +60,17 @@ static void	in_circle(t_img *data, t_v2i p, int color)
 
 /*Loops through a quarter of the map and selects the right color of the pixel
   based on its position relative to the center (player)*/
-void	minimap_painter(t_v2d player_xy, t_v2i start, t_app *p, int map[24][24], int sign_x)
+void	minimap_painter(t_v2d player_xy, t_v2i start, t_app *p, int sign_x)
 {
 	start.x = MAP_W - 70;
 	player_xy.x = p->pos.x;
 	while (start.x >= MAP_W - 120 && start.x < MAP_W - 19)
 	{
 		if (player_xy.x < 0 || player_xy.y < 0
-			|| player_xy.x > 24 || player_xy.y > 24)
+			|| player_xy.x > p->map.size_x || player_xy.y > p->map.size_y
+			|| p->map.data[(int) player_xy.y][(int) player_xy.x] == ' ')
 			in_circle(&p->mlx.data, start, CLR_B);
-		else if (map[(int) player_xy.y][(int) player_xy.x] == 0)
+		else if (p->map.data[(int) player_xy.y][(int) player_xy.x] == '0')
 			in_circle(&p->mlx.data, start, CLR_F);
 		else
 			in_circle(&p->mlx.data, start, CLR_W);
@@ -80,7 +81,7 @@ void	minimap_painter(t_v2d player_xy, t_v2i start, t_app *p, int map[24][24], in
 
 /*calls itself with different signs to paint the minimap. Each call paints
 a quarter of the minimap.*/
-void	ft_minimap(t_app *p, int map[24][24], int sign_x, int sign_y)
+void	ft_minimap(t_app *p, int sign_x, int sign_y)
 {
 	t_v2d	player_xy;
 	t_v2i	start;
@@ -89,7 +90,7 @@ void	ft_minimap(t_app *p, int map[24][24], int sign_x, int sign_y)
 	start.y = MMAP_CTR_Y;
 	while (start.y >= MAP_H - 120 && start.y < MAP_H - 19)
 	{
-		minimap_painter(player_xy, start, p, map, sign_x);
+		minimap_painter(player_xy, start, p, sign_x);
 		player_xy.y += (0.20 * sign_y);
 		start.y += sign_y;
 	}
@@ -98,7 +99,7 @@ void	ft_minimap(t_app *p, int map[24][24], int sign_x, int sign_y)
 		ft_cone(p);
 		return ;
 	}
-	ft_minimap(p, map, -1, -1);
-	ft_minimap(p, map, 1, -1);
-	ft_minimap(p, map, -1, 1);
+	ft_minimap(p, -1, -1);
+	ft_minimap(p, 1, -1);
+	ft_minimap(p, -1, 1);
 }

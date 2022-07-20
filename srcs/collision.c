@@ -12,7 +12,7 @@
 
 #include "../include/libc3d.h"
 
-bool	collider(double pos_x, double pos_y, t_v2i *r, int map[24][24])
+bool	collider(double pos_x, double pos_y, t_v2i *r, char **map)
 {
 	t_v2d	v;
 	double	old_dir;
@@ -28,11 +28,11 @@ bool	collider(double pos_x, double pos_y, t_v2i *r, int map[24][24])
 		old_dir = v.x;
 		v.x = v.x * cos(theta) - v.y * sin(theta);
 		v.y = old_dir * sin(theta) + v.y * cos(theta);
-		if (r && map[(int)(pos_y)][(int)(pos_x + v.x)] == 1)
+		if (r && map[(int)(pos_y)][(int)(pos_x + v.x)] == '1')
 			r->x = false;
-		if (r && map[(int)(pos_y + v.y)][(int)(pos_x)] == 1)
+		if (r && map[(int)(pos_y + v.y)][(int)(pos_x)] == '1')
 			r->y = false;
-		if (map[(int)(pos_y + v.y)][(int)(pos_x + v.x)] == 1)
+		if (map[(int)(pos_y + v.y)][(int)(pos_x + v.x)] == '1')
 			no_col = false;
 		// if nothing works might as well stop calculating to save cpu cycles
 		if (no_col == false && (!r || r->x == false) && (!r || r->y == false))
@@ -42,22 +42,22 @@ bool	collider(double pos_x, double pos_y, t_v2i *r, int map[24][24])
 	return (no_col);
 }
 
-void	collision_behaviour(t_app *p, int map[24][24], t_v2d v)
+void	collision_behaviour(t_app *p, t_v2d v)
 {
 	t_v2i	r;
 
 	r.x = true;
 	r.y = true;
-	if (collider(p->pos.x + v.x, p->pos.y + v.y, &r, map))
+	if (collider(p->pos.x + v.x, p->pos.y + v.y, &r, p->map.data))
 	{
 		p->pos.x += v.x;
 		p->pos.y += v.y;
 	}
 	else
 	{
-		if ((r.x && !r.y) || collider(p->pos.x + v.x, p->pos.y, NULL, map))
+		if ((r.x && !r.y) || collider(p->pos.x + v.x, p->pos.y, NULL, p->map.data))
 			p->pos.x += v.x;
-		if ((!r.x && r.y) || collider(p->pos.x, p->pos.y + v.y, NULL, map))
+		if ((!r.x && r.y) || collider(p->pos.x, p->pos.y + v.y, NULL, p->map.data))
 			p->pos.y += v.y;
 	}
 }

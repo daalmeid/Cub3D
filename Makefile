@@ -44,7 +44,15 @@ SRCS_	=	main.c\
 			fov_minimap.c\
 			hooks.c\
 			rc_painter.c\
-			rc_hit_find.c
+			rc_hit_find.c\
+			map/content.c\
+			map/errors.c\
+			map/map.c\
+			map/resize.c\
+			map/types.c\
+			map/utils.c\
+			map/verify.c
+
 SRCS	=	$(addprefix $(_SRC), $(SRCS_))
 OBJS	=	$(patsubst $(_SRC)%.c, $(_OBJ)%.o, $(SRCS))
 
@@ -76,6 +84,7 @@ srcs/libft/libft.a: $(shell make -C ./srcs/libft/ -q libft.a || echo force)
 
 $(_OBJ):
 	mkdir $@
+	mkdir $@/map
 
 ################## CLEAN ###################
 

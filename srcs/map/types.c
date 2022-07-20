@@ -48,17 +48,17 @@ void	readmap_info(t_mp *mp)
 static void	readmap_match(t_mp *mp)
 {
 	if (mp->line[0] == 'F')
-		mp->map->floor_color = readrgb(mp, 'F');
+		mp->p->clr_floor = readrgb(mp, 'F');
 	else if (mp->line[0] == 'C')
-		mp->map->ceil_color = readrgb(mp, 'C');
+		mp->p->clr_ceil = readrgb(mp, 'C');
 	else if (ft_strncmp(mp->line, "NO", 2) == 0)
-		mp->map->path[PATH_NO] = readword(mp, PATH_NO);
+		mp->p->tex[PATH_NO].path = readword(mp, PATH_NO);
 	else if (ft_strncmp(mp->line, "SO", 2) == 0)
-		mp->map->path[PATH_SO] = readword(mp, PATH_SO);
+		mp->p->tex[PATH_SO].path = readword(mp, PATH_SO);
 	else if (ft_strncmp(mp->line, "EA", 2) == 0)
-		mp->map->path[PATH_EA] = readword(mp, PATH_EA);
+		mp->p->tex[PATH_EA].path = readword(mp, PATH_EA);
 	else if (ft_strncmp(mp->line, "WE", 2) == 0)
-		mp->map->path[PATH_WE] = readword(mp, PATH_WE);
+		mp->p->tex[PATH_WE].path = readword(mp, PATH_WE);
 	else
 		map_error(1, "unknown type identifier\n", mp);
 	mp->count += 1;
@@ -70,7 +70,7 @@ static char	*readword(t_mp *mp, int indx)
 	char	*cp;
 	int		len;
 
-	if (mp->map->path[indx] != NULL)
+	if (mp->p->tex[indx].path != NULL)
 		map_error(1, "duplicated field\n", mp);
 	len = 0;
 	mp->col += 2;
@@ -99,8 +99,8 @@ static int	readrgb(t_mp *mp, char type)
 	i = 0;
 	val = 0;
 	mp->col += 1;
-	if ((type == 'C' && mp->map->ceil_color != -1)
-		|| (type == 'F' && mp->map->floor_color != -1))
+	if ((type == 'C' && mp->p->clr_ceil != UINT_MAX)
+		|| (type == 'F' && mp->p->clr_floor != UINT_MAX))
 		map_error(1, "duplicated field\n", mp);
 	ft_hop_blank(mp->line, 0, &mp->col);
 	while (i < 3)

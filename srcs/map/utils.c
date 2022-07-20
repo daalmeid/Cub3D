@@ -21,18 +21,18 @@ void	map_clean(t_mp *mp)
 		close(mp->fd);
 	if (mp->line)
 		free(mp->line);
-	if (mp->map->path[PATH_NO])
-		free(mp->map->path[PATH_NO]);
-	if (mp->map->path[PATH_SO])
-		free(mp->map->path[PATH_SO]);
-	if (mp->map->path[PATH_EA])
-		free(mp->map->path[PATH_EA]);
-	if (mp->map->path[PATH_WE])
-		free(mp->map->path[PATH_WE]);
+	if (mp->p->tex[PATH_NO].path)
+		free(mp->p->tex[PATH_NO].path);
+	if (mp->p->tex[PATH_SO].path)
+		free(mp->p->tex[PATH_SO].path);
+	if (mp->p->tex[PATH_EA].path)
+		free(mp->p->tex[PATH_EA].path);
+	if (mp->p->tex[PATH_WE].path)
+		free(mp->p->tex[PATH_WE].path);
 	i = 0;
-	while (i < mp->map->size_y)
-		free(mp->map->data[i++]);
-	free(mp->map->data);
+	while (i < mp->p->map.size_y)
+		free(mp->p->map.data[i++]);
+	free(mp->p->map.data);
 }
 
 /* A simple realloc suited for reading the map */

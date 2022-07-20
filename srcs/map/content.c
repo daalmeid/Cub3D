@@ -25,15 +25,15 @@ void	readmap_content(t_mp *mp)
 	bool	blank_line;
 
 	blank_line = false;
-	mp->map->size_y = 0;
+	mp->p->map.size_y = 0;
 	chunk = 10;
-	mp->map->data = (char **)ft_calloc(chunk, sizeof(char *));
-	if (!mp->map->data)
+	mp->p->map.data = (char **)ft_calloc(chunk, sizeof(char *));
+	if (!mp->p->map.data)
 		map_error(1, NULL, mp);
 	while (1)
 	{
-		mp->map->data[mp->map->size_y] = get_next_line(mp->fd);
-		if (!mp->map->data[mp->map->size_y])
+		mp->p->map.data[mp->p->map.size_y] = get_next_line(mp->fd);
+		if (!mp->p->map.data[mp->p->map.size_y])
 		{
 			if (errno != 0)
 				map_error(1, NULL, mp);
@@ -49,28 +49,28 @@ static void	readmap_line(t_mp *mp, size_t chunk, bool blank_line)
 {
 	char	**tmp;
 
-	if (ft_empty_line(mp->map->data[mp->map->size_y]))
+	if (ft_empty_line(mp->p->map.data[mp->p->map.size_y]))
 	{
-		if (mp->map->size_y != 0)
+		if (mp->p->map.size_y != 0)
 			blank_line = true;
-		free(mp->map->data[mp->map->size_y]);
-		mp->map->data[mp->map->size_y] = 0;
+		free(mp->p->map.data[mp->p->map.size_y]);
+		mp->p->map.data[mp->p->map.size_y] = 0;
 		mp->ln += 1;
 		return ;
 	}
 	if (blank_line)
 		map_error(1, "unexpected bytes after map content\n", mp);
 	mp->ln += 1;
-	if (mp->map->size_y == (chunk - 1))
+	if (mp->p->map.size_y == (chunk - 1))
 	{
 		chunk *= 10;
-		tmp = readmap_realloc(mp->map->data, chunk);
+		tmp = readmap_realloc(mp->p->map.data, chunk);
 		if (!tmp)
 			map_error(1, NULL, mp);
-		free(mp->map->data);
-		mp->map->data = tmp;
+		free(mp->p->map.data);
+		mp->p->map.data = tmp;
 	}
-	mp->map->size_y++;
+	mp->p->map.size_y++;
 }
 
 /* adjust the allocated memory to fit the map */
@@ -78,12 +78,12 @@ static void	readmap_adjust_y(t_mp *mp, size_t chunk)
 {
 	char	**tmp;
 
-	if (mp->map->size_y != chunk - 1)
+	if (mp->p->map.size_y != chunk - 1)
 	{
-		tmp = readmap_realloc(mp->map->data, mp->map->size_y);
+		tmp = readmap_realloc(mp->p->map.data, mp->p->map.size_y);
 		if (!tmp)
 			map_error(1, NULL, mp);
-		free(mp->map->data);
-		mp->map->data = tmp;
+		free(mp->p->map.data);
+		mp->p->map.data = tmp;
 	}
 }

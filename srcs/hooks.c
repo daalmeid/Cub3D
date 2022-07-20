@@ -56,8 +56,25 @@ static int	key_r(int key, t_app *p)
 	return (0);
 }
 
+static int	in_hook(t_app *app)
+{
+	(void)app;
+	app->stat = true;
+	return (0);
+}
+
+
+static int	out_hook(t_app *app)
+{
+	(void)app;
+	app->stat = false;
+	return (0);
+}
+
 void	hooks(t_app *p)
 {
+	mlx_hook(p->mlx.win, 10, 1L << 21, in_hook, p);
+	mlx_hook(p->mlx.win, 9, 1L << 21, out_hook, p);
 	mlx_hook(p->mlx.win, 2, 1L << 0, key_p, p);
 	mlx_hook(p->mlx.win, 3, 1L << 1, key_r, p);
 	mlx_loop_hook(p->mlx.ptr, handlers, p);

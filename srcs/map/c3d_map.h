@@ -1,44 +1,12 @@
 #ifndef C3D_MAP_H
 # define C3D_MAP_H
 
-# include "../../cub3D/srcs/libft/libft.h"
-# include <fcntl.h>
-# include <unistd.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <errno.h>
-
-typedef unsigned int uint;
-
-enum
-{
-	PATH_NO,
-	PATH_SO,
-	PATH_EA,
-	PATH_WE
-};
-
-typedef struct s_map
-{
-	char	**data;
-	char	*path[4];
-	size_t	size_x;
-	size_t	size_y;
-	int		floor_color;
-	int		ceil_color;
-	double	player_x;
-	double	player_y;
-	double	dir_x;
-	double	dir_y;
-	double	plane_x;
-	double	plane_y;
-
-}			t_map;
+# include "../../include/libc3d.h"
 
 typedef struct s_mp
 {
 	int		fd;
-	t_map	*map;
+	t_app	*p;
 	char	*file;
 	char	*line;
 	size_t	ln;
@@ -57,7 +25,7 @@ void	map_clean(t_mp *mp);
 int		werror(int code, char const *s, bool syserr);
 int 	map_error(int code, char const *s, t_mp *mp);
 
-void	readmap(char const *file, t_map *map);
+void	readmap(t_app *map, char const *file);
 void	readmap_info(t_mp *mp);
 void	readmap_content(t_mp *mp);
 void	readmap_resize(t_mp *mp);

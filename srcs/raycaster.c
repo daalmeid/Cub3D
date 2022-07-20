@@ -46,7 +46,7 @@ two x and y coordinates respectively that the ray will have to traverse
 considering the movement vector. It then calls the side distance finder,
 the hit finder, the identifier of the x coodinate of texture that was
 hit and, finally, the painter.*/
-static void	delta_calc(int x, t_app *p, int map[24][24])
+static void	delta_calc(int x, t_app *p)
 {
 	double			camera_x;
 	t_raycast		rc;
@@ -65,16 +65,16 @@ static void	delta_calc(int x, t_app *p, int map[24][24])
 	else
 		rc.delta_dist.y = 1e30;
 	side_dist_calc(p, &rc);
-	tex.side = hit_find(&rc, map);
+	tex.side = hit_find(&rc, p->map.data);
 	tex.x = get_tex_x(tex.side, rc, p, &perp_wall_dist);
 	ft_drawing((int)(MAP_H / perp_wall_dist), tex, x, p);
 }
 
-void	raycaster(t_app *p, int map[24][24])
+void	raycaster(t_app *p)
 {
 	int	x;
 
 	x = 0;
 	while (x < MAP_W)
-		delta_calc(x++, p, map);
+		delta_calc(x++, p);
 }
