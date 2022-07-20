@@ -13,26 +13,26 @@
 #include "c3d_map.h"
 
 /* Clean all the memory related to the map file */
-void	map_clean(t_mp *mp)
+void	map_clean(t_app *p, int fd, char const *line)
 {
 	size_t	i;
 
-	if (mp->fd >= 0)
-		close(mp->fd);
-	if (mp->line)
-		free(mp->line);
-	if (mp->p->tex[PATH_NO].path)
-		free(mp->p->tex[PATH_NO].path);
-	if (mp->p->tex[PATH_SO].path)
-		free(mp->p->tex[PATH_SO].path);
-	if (mp->p->tex[PATH_EA].path)
-		free(mp->p->tex[PATH_EA].path);
-	if (mp->p->tex[PATH_WE].path)
-		free(mp->p->tex[PATH_WE].path);
+	if (fd >= 0)
+		close(fd);
+	if (line)
+		free((char *)line);
+	if (p->tex[PATH_NO].path)
+		free(p->tex[PATH_NO].path);
+	if (p->tex[PATH_SO].path)
+		free(p->tex[PATH_SO].path);
+	if (p->tex[PATH_EA].path)
+		free(p->tex[PATH_EA].path);
+	if (p->tex[PATH_WE].path)
+		free(p->tex[PATH_WE].path);
 	i = 0;
-	while (i < mp->p->map.size_y)
-		free(mp->p->map.data[i++]);
-	free(mp->p->map.data);
+	while (i < p->map.size_y)
+		free(p->map.data[i++]);
+	free(p->map.data);
 }
 
 /* A simple realloc suited for reading the map */

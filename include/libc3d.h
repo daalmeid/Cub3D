@@ -24,10 +24,9 @@
 # include "../srcs/libmlx/mlx.h"
 # include "../srcs/libft/libft.h"
 
-typedef unsigned int uint;
-
-# define MAP_W 800
-# define MAP_H 400
+typedef unsigned int	t_uint;
+# define MAP_W 1280
+# define MAP_H 720
 # define MMAP_CTR_X (MAP_W - 70)
 # define MMAP_CTR_Y (MAP_H - 70)
 
@@ -74,9 +73,9 @@ enum
 
 /* Modifiiers */
 # define X_ACE 1.0
-# define X_SEN 0.5
-# define X_ROT 0.0078125
-# define X_VEL 192
+# define X_SEN 0.25
+# define X_ROT 0.03215
+# define X_VEL 64
 
 typedef struct s_v2i
 {
@@ -123,15 +122,13 @@ typedef struct s_app
 	t_v2d	dir;
 	t_v2d	plane;
 	t_v2i	mouse;
-
 	bool	kmap[6];
 	t_img	tex[4];
-
-	uint	clr_floor;
-	uint	clr_ceil;
+	t_uint	clr_floor;
+	t_uint	clr_ceil;
 	t_map	map;
 	bool	stat;
-} t_app;
+}			t_app;
 
 typedef struct s_raycast
 {
@@ -140,28 +137,29 @@ typedef struct s_raycast
 	t_v2i	step;
 	t_v2d	side_dist;
 	t_v2i	map;
-} t_raycast;
+}			t_raycast;
 
 typedef struct s_tex_rc_info
 {
-	char	side;
+	int		side;
 	int		x;
-	double	step; // How much to increase the texture coordinate per screen pixel
-	double	pos; // Starting texture coordinate
-} t_tex_rc_info;
+	double	step;
+	double	pos;
+}			t_tex_rc_info;
 
 bool		handle_new_image(t_img *dst, void *mlx);
 void		my_pixel_put(t_img *data, int x, int y, int color);
-uint		*get_img_pixel(t_img *data, int x, int y);
+t_uint		*get_img_pixel(t_img *data, int x, int y);
 void		raycaster(t_app *p);
 int			handlers(t_app *p);
 void		collision_behaviour(t_app *p, t_v2d v);
 void		ft_minimap(t_app *p, int sign_x, int sign_y);
 void		fill_cone(t_v2d player, t_v2d lft_vert, t_v2d rgt_vert, t_app *p);
 void		hooks(t_app *p);
-void		ft_drawing(int line_height, t_tex_rc_info tex, int x, t_app *p);
+void		ft_drawing(int line_height, t_tex_rc_info *tex, int x, t_app *p);
 char		hit_find(t_raycast *rc, char **map);
-int			get_tex_x(char side, t_raycast rc, t_app *p, double *perp_wall_dist);
+int			get_tex_x(int side, t_raycast rc, t_app *p, double *perp_wall_dist);
 void		readmap(t_app *map, char const *file);
+void		map_clean(t_app *p, int fd, char const *line);
 
 #endif

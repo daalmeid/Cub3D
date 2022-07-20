@@ -86,22 +86,14 @@ static double	handle_mouse(t_app *p)
 	t_v2i			m_pos;
 	double			mouse_x;
 
-	(void)p;
 	mouse_x = 0.0;
 	mlx_mouse_get_pos(p->mlx.ptr, p->mlx.win, &(m_pos.x), &(m_pos.y));
 	if (m_pos.x != MAP_W / 2 || m_pos.y != MAP_H / 2)
 	{
 		if (m_pos.x < MAP_W / 2 - 1)
-		{
-			//off_x = (double)(MAP_W - m_pos.x) / 1024 * ACCELERATION;
-			mouse_x = -((double)(MAP_W / 2 - m_pos.x) /** off_x*/) / 64 * X_SEN;
-		}
+			mouse_x = -((double)(MAP_W / 2 - m_pos.x) / 64) * X_SEN;
 		else if (m_pos.x > MAP_W / 2 + 1)
-		{
-			//off_x = (double)(m_pos.x) / 1024 * ACCELERATION;
-			mouse_x = ((double)-(MAP_W / 2 - m_pos.x) /** off_x*/) / 64 * X_SEN;
-		}
-		//printf("x: %d y: %d\n", m_pos.x, m_pos.y);
+			mouse_x = ((double)-(MAP_W / 2 - m_pos.x) / 64) * X_SEN;
 		mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
 	}
 	return (mouse_x);
@@ -127,9 +119,12 @@ int	handlers(t_app *p)
 	if (p->stat == true)
 	{
 		mlx_clear_window(p->mlx.ptr, p->mlx.win);
-		mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W / 2 - 5, MAP_H / 2, 0xffffff, "paused");
+		mlx_string_put(p->mlx.ptr, p->mlx.win,
+			MAP_W / 2 - 5, MAP_H / 2, 0xffffff, "paused");
+		mlx_mouse_show(p->mlx.ptr, p->mlx.win);
 		return (0);
 	}
+	mlx_mouse_hide(p->mlx.ptr, p->mlx.win);
 	handle_key_events(p);
 	raycaster(p);
 	ft_minimap(p, 1, 1);

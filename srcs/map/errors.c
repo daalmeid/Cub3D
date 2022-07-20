@@ -47,6 +47,6 @@ int	map_error(int code, char const *s, t_mp *mp)
 	}
 	else
 		werror(-1, NULL, true);
-	map_clean(mp);
+	map_clean(mp->p, mp->fd, mp->line);
 	exit (code);
 }

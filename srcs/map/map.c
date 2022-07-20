@@ -26,7 +26,8 @@ void	readmap(t_app *p, char const *file)
 	mp.fd = -1;
 	readmap_resize(&mp);
 	readmap_verify(&mp);
-	// map_clean(&mp); // Remove later
+	if (p->pos.x == -1)
+		map_error(1, "No player position provided", &mp);
 }
 
 /* Initialize variables */

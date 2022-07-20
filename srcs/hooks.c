@@ -14,8 +14,11 @@
 
 static int	esc_handler(t_app *p)
 {
+	mlx_loop_end(p->mlx.ptr);
 	mlx_destroy_image(p->mlx.ptr, p->mlx.data.ptr);
 	mlx_destroy_window(p->mlx.ptr, p->mlx.win);
+	mlx_destroy_display(p->mlx.ptr);
+	map_clean(p, -1, NULL);
 	exit(0);
 	return (0);
 }
@@ -53,21 +56,22 @@ static int	key_r(int key, t_app *p)
 		p->kmap[_RA] = false;
 	else if (key == KEY_LFT_ARR)
 		p->kmap[_LA] = false;
+	else if (key == 112)
+		p->stat = !p->stat;
 	return (0);
 }
 
-static int	in_hook(t_app *app)
+static int	in_hook(t_app *p)
 {
-	(void)app;
-	app->stat = true;
+	p->stat = true;
+	mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
 	return (0);
 }
 
-
-static int	out_hook(t_app *app)
+static int	out_hook(t_app *p)
 {
-	(void)app;
-	app->stat = false;
+	p->stat = false;
+	mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
 	return (0);
 }
 

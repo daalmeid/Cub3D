@@ -67,7 +67,7 @@ static void	delta_calc(int x, t_app *p)
 	side_dist_calc(p, &rc);
 	tex.side = hit_find(&rc, p->map.data);
 	tex.x = get_tex_x(tex.side, rc, p, &perp_wall_dist);
-	ft_drawing((int)(MAP_H / perp_wall_dist), tex, x, p);
+	ft_drawing((int)(MAP_H / perp_wall_dist), &tex, x, p);
 }
 
 void	raycaster(t_app *p)

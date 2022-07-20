@@ -40,10 +40,6 @@ void	ft_cone(t_app *p)
 	my_pixel_put(&p->mlx.data, MAP_W - 69, MAP_H - 71, CLR_P);
 	my_pixel_put(&p->mlx.data, MAP_W - 69, MAP_H - 70, CLR_P);
 	my_pixel_put(&p->mlx.data, MAP_W - 69, MAP_H - 69, CLR_P);
-	mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 30, MAP_H - 65, 0, "E");
-	mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 115, MAP_H - 65, 0, "W");
-	mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 70, MAP_H - 105, 0, "N");
-	mlx_string_put(p->mlx.ptr, p->mlx.win, MAP_W - 70, MAP_H - 25, 0, "S");
 }
 
 /*Creates a circular version of the minimap*/
@@ -54,8 +50,8 @@ static void	in_circle(t_img *data, t_v2i p, int color)
 	x = fabs(sqrt(pow(MMAP_CTR_X - p.x, 2) + pow(MMAP_CTR_Y - p.y, 2)));
 	if (x < 50)
 		my_pixel_put(data, p.x, p.y, color);
-	else if (x > 50 && x < 51)
-		my_pixel_put(data, p.x, p.y, CLR_D);
+	else if (x <= 51)
+		my_pixel_put(data, p.x, p.y, 0);
 }
 
 /*Loops through a quarter of the map and selects the right color of the pixel

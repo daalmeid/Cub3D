@@ -17,16 +17,17 @@ static void	wall_painter(int painter, int x, t_tex_rc_info *tex, t_app *p)
 {
 	int	color;
 
-	if (tex->side == 'N')
-		color = *(get_img_pixel(&(p->tex[0]), tex->x, (int) tex->pos));
-	else if (tex->side == 'S')
-		color = *(get_img_pixel(&(p->tex[1]), tex->x, (int) tex->pos));
-	else if (tex->side == 'W')
-		color = *(get_img_pixel(&(p->tex[2]), tex->x, (int) tex->pos));
+	if (tex->side == PATH_NO)
+		color = *(get_img_pixel(&(p->tex[PATH_NO]), tex->x, (int) tex->pos));
+	else if (tex->side == PATH_SO)
+		color = *(get_img_pixel(&(p->tex[PATH_SO]), tex->x, (int) tex->pos));
+	else if (tex->side == PATH_EA)
+		color = *(get_img_pixel(&(p->tex[PATH_EA]), tex->x, (int) tex->pos));
 	else
-		color = *(get_img_pixel(&(p->tex[3]), tex->x, (int) tex->pos));
+		color = *(get_img_pixel(&(p->tex[PATH_WE]), tex->x, (int) tex->pos));
 	tex->pos += tex->step;
-	if (tex->side == 'N' || tex->side == 'S')
+	color &= 0xffffff;
+	if (tex->side == PATH_NO || tex->side == PATH_SO)
 		color = (int)((color & 0x0000FF) * 0.70)
 			| (int)(((color >> 8) & 0x0000FF) * 0.70) << 8
 			| (int)((color >> 16) * 0.70) << 16;
@@ -35,7 +36,7 @@ static void	wall_painter(int painter, int x, t_tex_rc_info *tex, t_app *p)
 
 //6- Calculates lowest and highest pixel to fill in current stripe (ceiling,
 //wall and floor).
-void	ft_drawing(int line_height, t_tex_rc_info tex, int x, t_app *p)
+void	ft_drawing(int line_height, t_tex_rc_info *tex, int x, t_app *p)
 {
 	int		draw_start;
 	int		draw_end;
@@ -47,13 +48,13 @@ void	ft_drawing(int line_height, t_tex_rc_info tex, int x, t_app *p)
 	draw_end = line_height / 2 + MAP_H / 2;
 	if (draw_end >= MAP_H)
 		draw_end = MAP_H - 1;
-	tex.step = 1.0 * 64 / line_height;
-	tex.pos = (draw_start - MAP_H / 2 + line_height / 2) * tex.step;
+	tex->step = 1.0 * (p->tex[tex->side].height) / line_height;
+	tex->pos = (draw_start - MAP_H / 2 + line_height / 2) * tex->step;
 	painter = 0;
 	while (painter != draw_start)
-		my_pixel_put(&p->mlx.data, MAP_W - x - 1, painter++, 0x4287f5);
-	while (painter < draw_end)
-		wall_painter(painter++, x, &tex, p);
+		my_pixel_put(&p->mlx.data, MAP_W - x - 1, painter++, p->clr_ceil);
+	while (painter <= draw_end)
+		wall_painter(painter++, x, tex, p);
 	while (painter < MAP_H)
-		my_pixel_put(&p->mlx.data, MAP_W - x - 1, painter++, 0x3fb821);
+		my_pixel_put(&p->mlx.data, MAP_W - x - 1, painter++, p->clr_floor);
 }

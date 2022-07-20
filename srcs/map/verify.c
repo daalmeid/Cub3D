@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   verify.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:20:57 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/19 19:06:00 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/20 17:53:21 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ void	readmap_verify(t_mp *mp)
 			if (mp->p->map.data[j][i] == 'N' || mp->p->map.data[j][i] == 'S'
 				|| mp->p->map.data[j][i] == 'W' || mp->p->map.data[j][i] == 'E')
 				set_player(mp, i, j, mp->p->map.data[j][i]);
-			else if (mp->p->map.data[j][i] != '0' && mp->p->map.data[j][i] != '1'
-				&& mp->p->map.data[j][i] != ' ')
-				map_error(1, "unknown map tile identifier\n", mp);
-			if ((i == 0 || j == 0 || i == mp->p->map.size_x - 1
-					|| j == mp->p->map.size_y - 1) && mp->p->map.data[j][i] != '1'
-					&& mp->p->map.data[j][i] != ' ')
-				map_error(1, "map is not surrounded by walls\n", mp);
+			else if (mp->p->map.data[j][i] != '0'
+				&& mp->p->map.data[j][i] != '1' && mp->p->map.data[j][i] != ' ')
+				map_error(1, "Unknown map tile identifier\n", mp);
+			if ((i == 0 || j == 0
+					|| i == mp->p->map.size_x - 1 || j == mp->p->map.size_y - 1)
+				&& mp->p->map.data[j][i] != '1' && mp->p->map.data[j][i] != ' ')
+				map_error(1, "Map is not surrounded by walls\n", mp);
 			if (mp->p->map.data[j][i] == ' ' && isnearby(mp, i, j, '0'))
-				map_error(1, "map is not surrounded by walls\n", mp);
+				map_error(1, "Map is not surrounded by walls\n", mp);
 			i++;
 		}
 		j++;
@@ -52,16 +52,16 @@ static int	isnearby(t_mp *mp, size_t x, size_t y, char c)
 
 	map = mp->p->map.data;
 	if (x != 0 && (map[y][x - 1] == c
-		|| (y != 0 && map[y - 1][x - 1] == c))) /* left and left-up corner */
+		|| (y != 0 && map[y - 1][x - 1] == c)))
 		return (true);
 	if (x != mp->p->map.size_x -1 && (map[y][x + 1] == c
-		|| (y != mp->p->map.size_y - 1 && map[y + 1][x + 1] == c))) /* right and down-right corner */
+		|| (y != mp->p->map.size_y - 1 && map[y + 1][x + 1] == c)))
 		return (true);
 	if (y != 0 && (map[y - 1][x] == c
-		|| (x != mp->p->map.size_x - 1 && map[y - 1][x + 1] == c))) // up and up-right corner
+		|| (x != mp->p->map.size_x - 1 && map[y - 1][x + 1] == c)))
 		return (true);
 	if (y != mp->p->map.size_y - 1 && (map[y + 1][x] == c
-		|| (x != 0 && map[y + 1][x - 1] == c))) // down and down-left corner
+		|| (x != 0 && map[y + 1][x - 1] == c)))
 		return (true);
 	return (false);
 }
@@ -71,17 +71,16 @@ static void	set_player(t_mp *mp, size_t i, size_t j, char dir)
 {
 	(void)dir;
 	if (mp->p->pos.x != -1)
-		map_error(1, "duplicated player spawn position\n", mp);
+		map_error(1, "Duplicated player spawn position\n", mp);
 	if (isnearby(mp, i, j, ' '))
-		map_error(1, "player spawn position is outside of map\n", mp);
-	mp->p->pos.x = i;
-	mp->p->pos.y = j;
+		map_error(1, "Player spawn position is outside of map\n", mp);
+	mp->p->pos.x = i + 0.5;
+	mp->p->pos.y = j + 0.5;
 	mp->p->map.data[j][i] = '0';
 	if (dir == 'N' || dir == 'S')
 		set_orientation(mp, dir, 1);
 	else
 		set_orientation(mp, dir, -1);
-
 }
 
 static void	set_orientation(t_mp *mp, char dir, int sign)

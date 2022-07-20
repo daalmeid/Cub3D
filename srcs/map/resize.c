@@ -20,14 +20,16 @@ void	readmap_resize(t_mp *mp)
 	size_t	row;
 
 	row = 0;
+	if (mp->p->map.size_y == 0)
+		map_error(0, "Must provide a map\n", mp);
 	if (mp->p->map.size_y < 3)
-		map_error(0, "map height is too small\n", mp);
+		map_error(0, "Map height is too small\n", mp);
 	while (row < mp->p->map.size_y)
 		resize_calculate(mp, row++);
 	mp->sx -= mp->off_l;
 	mp->p->map.size_x = mp->sx;
 	if (mp->p->map.size_x < 3)
-		map_error(0, "map width is too small\n", mp);
+		map_error(0, "Map width is too small\n", mp);
 	readmap_adjust_x(mp);
 }
 
