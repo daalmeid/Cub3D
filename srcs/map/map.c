@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:12:36 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/19 18:12:37 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/21 15:21:53 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,3 @@ static void	readmap_init(t_mp *mp, t_app *p, char const *file)
 	mp->off_l = INT_MAX;
 	mp->p->pos.x = -1;
 }
-
-// int	main(int argc, char **argv)
-// {
-// 	t_map	map;
-// 	char	*tmp;
-
-// 	if (argc == 2)
-// 	{
-// 		tmp = (argv[1]) + (ft_strlen(argv[1]) - 4);
-// 		if (tmp <= argv[1] || ft_strncmp(tmp, ".cub", 5) != 0)
-// 		{
-// 			ft_putstr_fd("Error\nUnknown map file extension\n", STDERR_FILENO);
-// 			exit(1);
-// 		}
-// 		ft_memset(&map, 0, sizeof(t_map));
-// 		readmap(argv[1], &map);
-// 	}
-// 	else
-// 	{
-// 		ft_putstr_fd("Error\nUsage: ./prog *.cub\n", STDERR_FILENO);
-// 		exit (1);
-// 	}
-// 	return (0);
-// }

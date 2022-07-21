@@ -12,19 +12,29 @@
 
 #include "../include/libc3d.h"
 
-static int	esc_handler(t_app *p)
+static int	key_p(int key, t_app *p);
+static int	key_r(int key, t_app *p);
+static int	in_hook(t_app *p);
+static int	out_hook(t_app *p);
+
+void	hooks(t_app *p)
 {
-	mlx_loop_end(p->mlx.ptr);
-	mlx_destroy_image(p->mlx.ptr, p->mlx.data.ptr);
-	mlx_destroy_window(p->mlx.ptr, p->mlx.win);
-	mlx_destroy_display(p->mlx.ptr);
-	map_clean(p, -1, NULL);
-	exit(0);
-	return (0);
+	mlx_hook(p->mlx.win, 9, 1L << 21, in_hook, p);
+	mlx_hook(p->mlx.win, 10, 1L << 21, out_hook, p);
+	mlx_hook(p->mlx.win, 2, 1L << 0, key_p, p);
+	mlx_hook(p->mlx.win, 3, 1L << 1, key_r, p);
+	mlx_loop_hook(p->mlx.ptr, handlers, p);
+	mlx_hook(p->mlx.win, 17, 0, esc_handler, p);
 }
 
 static int	key_p(int key, t_app *p)
 {
+	if (key == KEY_N)
+	{
+		mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
+		p->mouse_enable = !p->mouse_enable;
+		return (0);
+	}
 	if (key == KEY_ESC)
 		esc_handler(p);
 	else if (key == KEY_W)
@@ -56,31 +66,23 @@ static int	key_r(int key, t_app *p)
 		p->kmap[_RA] = false;
 	else if (key == KEY_LFT_ARR)
 		p->kmap[_LA] = false;
-	else if (key == 112)
-		p->stat = !p->stat;
 	return (0);
 }
 
 static int	in_hook(t_app *p)
 {
-	p->stat = true;
-	mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
+	if (p->mouse_enable)
+	{
+		mlx_mouse_hide(p->mlx.ptr, p->mlx.win);
+		mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
+	}
+	p->in_window = true;
 	return (0);
 }
 
 static int	out_hook(t_app *p)
 {
-	p->stat = false;
-	mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
+	mlx_mouse_show(p->mlx.ptr, p->mlx.win);
+	p->in_window = false;
 	return (0);
-}
-
-void	hooks(t_app *p)
-{
-	mlx_hook(p->mlx.win, 10, 1L << 21, in_hook, p);
-	mlx_hook(p->mlx.win, 9, 1L << 21, out_hook, p);
-	mlx_hook(p->mlx.win, 2, 1L << 0, key_p, p);
-	mlx_hook(p->mlx.win, 3, 1L << 1, key_r, p);
-	mlx_loop_hook(p->mlx.ptr, handlers, p);
-	mlx_hook(p->mlx.win, 17, 0, esc_handler, p);
 }

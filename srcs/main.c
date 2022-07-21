@@ -72,10 +72,11 @@ int	main(int argc, char **argv)
 		exit(1);
 	}
 	readmap(&p, argv[1]);
-	p.stat = true;
 	prep_ptrs(&p.mlx);
 	prep_tex_data(&p);
 	hooks(&p);
+	p.in_window = true;
+	p.mouse_enable = true;
 	mlx_mouse_hide(p.mlx.ptr, p.mlx.win);
 	mlx_mouse_move(p.mlx.ptr, p.mlx.win, MAP_W / 2, MAP_H / 2);
 	mlx_loop(p.mlx.ptr);

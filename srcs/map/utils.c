@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:17:16 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/19 18:17:16 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/21 16:24:28 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	**readmap_realloc(char **src, size_t bytes)
 	if (!buff)
 		return (NULL);
 	i = 0;
-	while (src[i] && i < bytes)
+	while (i < bytes && src[i])
 	{
 		buff[i] = src[i];
 		i++;

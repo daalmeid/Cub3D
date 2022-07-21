@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libc3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/19 11:09:47 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/21 16:41:04 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ enum
 	KEY_S = 115,
 	KEY_D = 100,
 	KEY_LFT_ARR = 65361,
-	KEY_RGT_ARR = 65363
+	KEY_RGT_ARR = 65363,
+	KEY_N = 110
 };
 
 enum
@@ -72,10 +73,9 @@ enum
 };
 
 /* Modifiiers */
-# define X_ACE 1.0
-# define X_SEN 0.25
+# define X_SEN 0.15
 # define X_ROT 0.03215
-# define X_VEL 64
+# define X_VEL 48
 
 typedef struct s_v2i
 {
@@ -127,7 +127,8 @@ typedef struct s_app
 	t_uint	clr_floor;
 	t_uint	clr_ceil;
 	t_map	map;
-	bool	stat;
+	bool	in_window;
+	bool 	mouse_enable;
 }			t_app;
 
 typedef struct s_raycast
@@ -150,15 +151,20 @@ typedef struct s_tex_rc_info
 bool		handle_new_image(t_img *dst, void *mlx);
 void		my_pixel_put(t_img *data, int x, int y, int color);
 t_uint		*get_img_pixel(t_img *data, int x, int y);
+
 void		raycaster(t_app *p);
 int			handlers(t_app *p);
+int			esc_handler(t_app *p);
 void		collision_behaviour(t_app *p, t_v2d v);
+
 void		ft_minimap(t_app *p, int sign_x, int sign_y);
 void		fill_cone(t_v2d player, t_v2d lft_vert, t_v2d rgt_vert, t_app *p);
+
 void		hooks(t_app *p);
 void		ft_drawing(int line_height, t_tex_rc_info *tex, int x, t_app *p);
 char		hit_find(t_raycast *rc, char **map);
 int			get_tex_x(int side, t_raycast rc, t_app *p, double *perp_wall_dist);
+
 void		readmap(t_app *map, char const *file);
 void		map_clean(t_app *p, int fd, char const *line);
 

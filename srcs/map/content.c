@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   content.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:10:59 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/19 18:11:01 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/21 16:19:38 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	readmap_content(t_mp *mp)
 	blank_line = false;
 	mp->p->map.size_y = 0;
 	chunk = 10;
-	mp->p->map.data = (char **)ft_calloc(chunk, sizeof(char *));
+	mp->p->map.data = (char **)ft_calloc(chunk + 1, sizeof(char *));
 	if (!mp->p->map.data)
 		map_error(1, NULL, mp);
 	while (1)

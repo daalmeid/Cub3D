@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/18 17:14:48 by marvin           ###   ########.fr        #
+#    Updated: 2022/07/21 16:39:09 by rafernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ MAKE	+=		-s
 ################## COMPILER ################
 
 CC		=		cc
-CFLAGS	=		-Wall -Werror -Wextra -O3
+CFLAGS	=		-Wall -Werror -Wextra -O2
 
 ################## FILES ###################
 

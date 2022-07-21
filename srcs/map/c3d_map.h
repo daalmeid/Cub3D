@@ -6,7 +6,7 @@
 /*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/20 17:49:08 by rafernan          #+#    #+#             */
-/*   Updated: 2022/07/20 17:49:59 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/21 15:39:27 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	map_clean(t_app *p, int fd, char const *line);
 int		werror(int code, char const *s, bool syserr);
 int		map_error(int code, char const *s, t_mp *mp);
 
+/* map */
 void	readmap(t_app *map, char const *file);
 void	readmap_info(t_mp *mp);
 void	readmap_content(t_mp *mp);

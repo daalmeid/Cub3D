@@ -30,6 +30,12 @@ int	get_tex_x(int side, t_raycast rc, t_app *p, double *perp_wall_dist)
 	}
 	wall_x -= floor((wall_x));
 	tex_x = (int)(wall_x * p->tex[side].width);
+	if ((side == PATH_WE || side == PATH_EA)
+		&& rc.ray_dir.x < 0)
+		tex_x = p->tex[side].width - tex_x - 1;
+	if ((side == PATH_NO || side == PATH_SO)
+		&& rc.ray_dir.y > 0)
+		tex_x = p->tex[side].width - tex_x - 1;
 	return (tex_x);
 }
 
@@ -38,14 +44,14 @@ static int	get_final_side(char side, t_v2d ray_dir)
 {
 	if (side == 'y')
 	{
-		if (ray_dir.x > 0)
+		if (ray_dir.x < 0)
 			side = PATH_EA;
 		else
 			side = PATH_WE;
 	}
 	else
 	{	
-		if (ray_dir.y > 0)
+		if (ray_dir.y < 0)
 			side = PATH_SO;
 		else
 			side = PATH_NO;
