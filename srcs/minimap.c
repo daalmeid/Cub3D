@@ -20,8 +20,8 @@ void	ft_cone(t_app *p)
 	t_v2d	lft_vert;
 	t_v2d	rgt_vert;
 
-	player.x = (double)(MMAP_CTR_X);
-	player.y = (double)(MMAP_CTR_Y);
+	player.x = (double)(MAP_W - 70);
+	player.y = (double)(MAP_H - 70);
 	lft_vert.x = p->dir.x + p->plane.x * -1;
 	lft_vert.y = p->dir.y + p->plane.y * -1;
 	rgt_vert.x = p->dir.x + p->plane.x * 1;
@@ -47,7 +47,7 @@ static void	in_circle(t_img *data, t_v2i p, int color)
 {
 	double	x;
 
-	x = fabs(sqrt(pow(MMAP_CTR_X - p.x, 2) + pow(MMAP_CTR_Y - p.y, 2)));
+	x = fabs(sqrt(pow((MAP_W - 70) - p.x, 2) + pow((MAP_H - 70) - p.y, 2)));
 	if (x < 50)
 		my_pixel_put(data, p.x, p.y, color);
 	else if (x <= 51)
@@ -83,7 +83,7 @@ void	ft_minimap(t_app *p, int sign_x, int sign_y)
 	t_v2i	start;
 
 	player_xy.y = p->pos.y;
-	start.y = MMAP_CTR_Y;
+	start.y = MAP_H - 70;
 	while (start.y >= MAP_H - 120 && start.y < MAP_H - 19)
 	{
 		minimap_painter(player_xy, start, p, sign_x);

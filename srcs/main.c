@@ -14,12 +14,6 @@
 
 void	prep_ptrs(t_mlx *mlx)
 {	
-	mlx->ptr = mlx_init();
-	if (!mlx->ptr)
-	{
-		perror("Error establishing connection to graphical system");
-		exit(0);
-	}
 	mlx->win = mlx_new_window(mlx->ptr, MAP_W, MAP_H, "Cub3D");
 	if (!mlx->win)
 	{
@@ -43,11 +37,22 @@ void	prep_tex_data(t_app *p)
 	int	i;
 
 	i = 0;
+	p->mlx.ptr = mlx_init();
+	if (!p->mlx.ptr)
+	{
+		perror("Error establishing connection to graphical system");
+		exit(0);
+	}
 	while (i < 4)
 	{
 		if (!handle_new_image(&p->tex[i], p->mlx.ptr))
 		{
 			printf("Failed to load image\n");
+			while(--i >= 0)
+				mlx_destroy_image(p->mlx.ptr, p->tex[i].ptr);
+			mlx_destroy_display(p->mlx.ptr);
+			free(p->mlx.ptr);
+			map_clean(p, -1, NULL);
 			exit (2);
 		}
 		i++;
@@ -72,8 +77,8 @@ int	main(int argc, char **argv)
 		exit(1);
 	}
 	readmap(&p, argv[1]);
-	prep_ptrs(&p.mlx);
 	prep_tex_data(&p);
+	prep_ptrs(&p.mlx);
 	hooks(&p);
 	p.in_window = true;
 	p.mouse_enable = true;

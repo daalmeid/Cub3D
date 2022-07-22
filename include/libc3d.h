@@ -27,8 +27,6 @@
 typedef unsigned int	t_uint;
 # define MAP_W 1280
 # define MAP_H 720
-# define MMAP_CTR_X (MAP_W - 70)
-# define MMAP_CTR_Y (MAP_H - 70)
 
 /* MAP KEYS */
 enum
@@ -40,7 +38,7 @@ enum
 	KEY_D = 100,
 	KEY_LFT_ARR = 65361,
 	KEY_RGT_ARR = 65363,
-	KEY_N = 110
+	KEY_M = 109
 };
 
 enum
@@ -128,7 +126,7 @@ typedef struct s_app
 	t_uint	clr_ceil;
 	t_map	map;
 	bool	in_window;
-	bool 	mouse_enable;
+	bool	mouse_enable;
 }			t_app;
 
 typedef struct s_raycast

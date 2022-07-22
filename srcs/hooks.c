@@ -29,7 +29,7 @@ void	hooks(t_app *p)
 
 static int	key_p(int key, t_app *p)
 {
-	if (key == KEY_N)
+	if (key == KEY_M)
 	{
 		mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
 		p->mouse_enable = !p->mouse_enable;
