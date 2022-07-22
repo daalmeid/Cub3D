@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   content.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: daalmeid <daalmeid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:10:59 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/21 16:19:38 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/22 14:45:36 by daalmeid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "c3d_map.h"
 
-static void	readmap_line(t_mp *mp, size_t chunk, bool blank_line);
+static void	readmap_line(t_mp *mp, size_t chunk, bool *blank_line);
 static void	readmap_adjust_y(t_mp *mp, size_t chunk);
 
 /*
@@ -39,26 +39,27 @@ void	readmap_content(t_mp *mp)
 				map_error(1, NULL, mp);
 			break ;
 		}
-		readmap_line(mp, chunk, blank_line);
+		readmap_line(mp, chunk, &blank_line);
 	}
 	readmap_adjust_y(mp, chunk);
 }
 
 /* handle each line */
-static void	readmap_line(t_mp *mp, size_t chunk, bool blank_line)
+static void	readmap_line(t_mp *mp, size_t chunk, bool *blank_line)
 {
 	char	**tmp;
 
 	if (ft_empty_line(mp->p->map.data[mp->p->map.size_y]))
 	{
 		if (mp->p->map.size_y != 0)
-			blank_line = true;
+			*blank_line = true;
 		free(mp->p->map.data[mp->p->map.size_y]);
 		mp->p->map.data[mp->p->map.size_y] = 0;
 		mp->ln += 1;
 		return ;
 	}
-	if (blank_line)
+	mp->p->map.size_y++;
+	if (*blank_line)
 		map_error(1, "unexpected bytes after map content\n", mp);
 	mp->ln += 1;
 	if (mp->p->map.size_y == (chunk - 1))
@@ -70,7 +71,6 @@ static void	readmap_line(t_mp *mp, size_t chunk, bool blank_line)
 		free(mp->p->map.data);
 		mp->p->map.data = tmp;
 	}
-	mp->p->map.size_y++;
 }
 
 /* adjust the allocated memory to fit the map */

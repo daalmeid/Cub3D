@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+         #
+#    By: daalmeid <daalmeid@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/21 16:39:09 by rafernan         ###   ########.fr        #
+#    Updated: 2022/07/22 14:20:33 by daalmeid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ SRCS_	=	main.c\
 			hooks.c\
 			rc_painter.c\
 			rc_hit_find.c\
+			cleaner.c\
 			map/content.c\
 			map/errors.c\
 			map/map.c\

@@ -12,24 +12,26 @@
 
 #include "../include/libc3d.h"
 
-void	prep_ptrs(t_mlx *mlx)
+void	prep_ptrs(t_app *p)
 {	
-	mlx->win = mlx_new_window(mlx->ptr, MAP_W, MAP_H, "Cub3D");
-	if (!mlx->win)
+	p->mlx.win = mlx_new_window(p->mlx.ptr, MAP_W, MAP_H, "Cub3D");
+	if (!p->mlx.win)
 	{
 		perror("Error creating window");
-		exit(0);
+		cleaner(p);
+		exit(2);
 	}
-	mlx->data.ptr = mlx_new_image(mlx->ptr, MAP_W, MAP_H);
-	if (!mlx->data.ptr)
+	p->mlx.data.ptr = mlx_new_image(p->mlx.ptr, MAP_W, MAP_H);
+	if (!p->mlx.data.ptr)
 	{
 		perror("Error creating image");
-		exit(0);
+		cleaner(p);
+		exit(2);
 	}
-	mlx->data.addr = mlx_get_data_addr(mlx->data.ptr, &mlx->data.bpp,
-			&mlx->data.line_length, &mlx->data.endian);
-	mlx->data.width = MAP_W;
-	mlx->data.height = MAP_H;
+	p->mlx.data.addr = mlx_get_data_addr(p->mlx.data.ptr, &p->mlx.data.bpp,
+			&p->mlx.data.line_length, &p->mlx.data.endian);
+	p->mlx.data.width = MAP_W;
+	p->mlx.data.height = MAP_H;
 }
 
 void	prep_tex_data(t_app *p)
@@ -41,18 +43,14 @@ void	prep_tex_data(t_app *p)
 	if (!p->mlx.ptr)
 	{
 		perror("Error establishing connection to graphical system");
-		exit(0);
+		exit(2);
 	}
 	while (i < 4)
 	{
 		if (!handle_new_image(&p->tex[i], p->mlx.ptr))
 		{
 			printf("Failed to load image\n");
-			while(--i >= 0)
-				mlx_destroy_image(p->mlx.ptr, p->tex[i].ptr);
-			mlx_destroy_display(p->mlx.ptr);
-			free(p->mlx.ptr);
-			map_clean(p, -1, NULL);
+			cleaner(p);
 			exit (2);
 		}
 		i++;
@@ -78,7 +76,7 @@ int	main(int argc, char **argv)
 	}
 	readmap(&p, argv[1]);
 	prep_tex_data(&p);
-	prep_ptrs(&p.mlx);
+	prep_ptrs(&p);
 	hooks(&p);
 	p.in_window = true;
 	p.mouse_enable = true;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libc3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: daalmeid <daalmeid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/21 16:41:04 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/22 14:20:45 by daalmeid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,5 +165,7 @@ int			get_tex_x(int side, t_raycast rc, t_app *p, double *perp_wall_dist);
 
 void		readmap(t_app *map, char const *file);
 void		map_clean(t_app *p, int fd, char const *line);
+
+void		cleaner(t_app *p);
 
 #endif

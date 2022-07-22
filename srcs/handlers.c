@@ -31,18 +31,9 @@ int	handlers(t_app *p)
 
 int	esc_handler(t_app *p)
 {
-	int	i;
-
-	i = 0;
 	mlx_mouse_show(p->mlx.ptr, p->mlx.win);
 	mlx_loop_end(p->mlx.ptr);
-	mlx_destroy_window(p->mlx.ptr, p->mlx.win);
-	mlx_destroy_image(p->mlx.ptr, p->mlx.data.ptr);
-	while (i < 4)
-		mlx_destroy_image(p->mlx.ptr, p->tex[i++].ptr);
-	mlx_destroy_display(p->mlx.ptr);
-	free(p->mlx.ptr);
-	map_clean(p, -1, NULL);
+	cleaner(p);
 	exit(0);
 	return (0);
 }
