@@ -6,7 +6,7 @@
 /*   By: daalmeid <daalmeid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/22 14:20:45 by daalmeid         ###   ########.fr       */
+/*   Updated: 2022/07/22 16:29:40 by daalmeid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include "../srcs/libft/libft.h"
 
 typedef unsigned int	t_uint;
-# define MAP_W 1280
-# define MAP_H 720
+# define MAP_W 800
+# define MAP_H 400
 
 /* MAP KEYS */
 enum
