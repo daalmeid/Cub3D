@@ -104,6 +104,7 @@ typedef struct s_mlx
 	void	*ptr;
 	void	*win;
 	t_img	data;
+	t_img	hands;
 }			t_mlx;
 
 typedef struct s_map

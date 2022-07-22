@@ -55,6 +55,13 @@ void	prep_tex_data(t_app *p)
 		}
 		i++;
 	}
+	p->mlx.hands.path = "./srcs/hands.xpm";
+	if (!handle_new_image(&p->mlx.hands, p->mlx.ptr))
+	{
+		perror("Error creating image");
+		cleaner(p);
+		exit(2);
+	}
 }
 
 int	main(int argc, char **argv)

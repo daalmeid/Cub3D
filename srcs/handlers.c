@@ -15,6 +15,7 @@
 static void		rotation_handler(t_app *p, double theta);
 static double	handle_mouse(t_app *p);
 static int		handle_key_events(t_app *p);
+static void		draw_hands(t_app *p);
 
 int	handlers(t_app *p)
 {
@@ -24,9 +25,38 @@ int	handlers(t_app *p)
 	else
 		mlx_mouse_hide(p->mlx.ptr, p->mlx.win);
 	raycaster(p);
+	draw_hands(p);
 	ft_minimap(p, 1, 1);
 	mlx_put_image_to_window(p->mlx.ptr, p->mlx.win, p->mlx.data.ptr, 0, 0);
 	return (0);
+}
+
+static void	draw_hands(t_app *p)
+{
+	t_v2d	pos;
+	t_v2i	put;
+	t_v2d	incr;
+	t_uint	color;
+
+	pos.y = p->mlx.hands.height;
+	put.y = MAP_H;
+	incr.x = fabs((double)p->mlx.hands.width / (MAP_W / 3));
+	incr.y = fabs((double)p->mlx.hands.height / (MAP_H / 3));
+	while (pos.y >= 0)
+	{
+		pos.x = 0;
+		put.x = MAP_W / 3;
+		while (pos.x < p->mlx.hands.width)
+		{
+			color = *get_img_pixel(&p->mlx.hands, (int)(pos.x), (int)(pos.y));
+			if (color != 0xff000000)
+				my_pixel_put(&p->mlx.data, put.x, put.y, color);
+			pos.x += incr.x;
+			put.x += 1;
+		}
+		pos.y -= incr.y;
+		put.y -= 1;
+	}
 }
 
 int	esc_handler(t_app *p)
