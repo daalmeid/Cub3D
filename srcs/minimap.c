@@ -31,15 +31,15 @@ void	ft_cone(t_app *p)
 	rgt_vert.x = rgt_vert.x * (MAP_W / 100 + 2) + player.x;
 	rgt_vert.y = rgt_vert.y * (MAP_W / 100 + 2) + player.y;
 	fill_cone(player, lft_vert, rgt_vert, p);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12) + 1, MAP_H - (MAP_W / 12) + 1, CLR_P);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12) + 1, MAP_H - (MAP_W / 12), CLR_P);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12) + 1, MAP_H - (MAP_W / 12) - 1, CLR_P);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12), MAP_H - (MAP_W / 12) + 1, CLR_P);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12), MAP_H - (MAP_W / 12), 0xffffff);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12), MAP_H - (MAP_W / 12) - 1, CLR_P);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12) - 1, MAP_H - (MAP_W / 12) + 1, CLR_P);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12) - 1, MAP_H - (MAP_W / 12), CLR_P);
-	my_pixel_put(&p->mlx.data, MAP_W - (MAP_W / 12) - 1, MAP_H - (MAP_W / 12) - 1, CLR_P);
+	my_pixel_put(&p->mlx.data, player.x + 1, player.y + 1, CLR_P);
+	my_pixel_put(&p->mlx.data, player.x + 1, player.y, CLR_P);
+	my_pixel_put(&p->mlx.data, player.x + 1, player.y - 1, CLR_P);
+	my_pixel_put(&p->mlx.data, player.x, player.y + 1, CLR_P);
+	my_pixel_put(&p->mlx.data, player.x, player.y, 0xffffff);
+	my_pixel_put(&p->mlx.data, player.x, player.y - 1, CLR_P);
+	my_pixel_put(&p->mlx.data, player.x - 1, player.y + 1, CLR_P);
+	my_pixel_put(&p->mlx.data, player.x - 1, player.y, CLR_P);
+	my_pixel_put(&p->mlx.data, player.x - 1, player.y - 1, CLR_P);
 }
 
 /*Creates a circular version of the minimap*/
@@ -47,7 +47,8 @@ static void	in_circle(t_img *data, t_v2i p, int color)
 {
 	double	x;
 
-	x = fabs(sqrt(pow((MAP_W - (MAP_W / 12)) - p.x, 2) + pow((MAP_H - (MAP_W / 12)) - p.y, 2)));
+	x = fabs(sqrt(pow((MAP_W - (MAP_W / 12)) - p.x, 2)
+				+ pow((MAP_H - (MAP_W / 12)) - p.y, 2)));
 	x = round(x);
 	if (x < MAP_W / 21)
 		my_pixel_put(data, p.x, p.y, color);
@@ -59,9 +60,13 @@ static void	in_circle(t_img *data, t_v2i p, int color)
   based on its position relative to the center (player)*/
 void	minimap_painter(t_v2d player_xy, t_v2i start, t_app *p, int sign_x)
 {
+	double	scale;
+
+	scale = -0.0000536 * MAP_W + 0.193;
 	start.x = MAP_W - (MAP_W / 12);
 	player_xy.x = p->pos.x;
-	while (start.x >= MAP_W - (MAP_W / 12) - MAP_W / 20 && start.x < MAP_W - (MAP_W / 12) + MAP_W / 20)
+	while (start.x >= MAP_W - (MAP_W / 12) - MAP_W / 20
+		&& start.x < MAP_W - (MAP_W / 12) + MAP_W / 20)
 	{
 		if (player_xy.x < 0 || player_xy.y < 0
 			|| player_xy.x >= p->map.size_x || player_xy.y >= p->map.size_y
@@ -71,7 +76,7 @@ void	minimap_painter(t_v2d player_xy, t_v2i start, t_app *p, int sign_x)
 			in_circle(&p->mlx.data, start, CLR_F);
 		else
 			in_circle(&p->mlx.data, start, CLR_W);
-		player_xy.x += (0.20 * sign_x);
+		player_xy.x += (scale * sign_x);
 		start.x += sign_x;
 	}
 }
@@ -82,13 +87,16 @@ void	ft_minimap(t_app *p, int sign_x, int sign_y)
 {
 	t_v2d	player_xy;
 	t_v2i	start;
+	double	scale;
 
+	scale = -0.0000536 * MAP_W + 0.193;
 	player_xy.y = p->pos.y;
 	start.y = MAP_H - (MAP_W / 12);
-	while (start.y >= MAP_H - (MAP_W / 12) - MAP_W / 20 && start.y < MAP_H - (MAP_W / 12) + MAP_W / 20)
+	while (start.y >= MAP_H - (MAP_W / 12) - MAP_W / 20
+		&& start.y < MAP_H - (MAP_W / 12) + MAP_W / 20)
 	{
 		minimap_painter(player_xy, start, p, sign_x);
-		player_xy.y += (0.20 * sign_y);
+		player_xy.y += (scale * sign_y);
 		start.y += sign_y;
 	}
 	if (sign_x != 1 || sign_y != 1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libc3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daalmeid <daalmeid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/22 16:29:40 by daalmeid         ###   ########.fr       */
+/*   Updated: 2022/07/25 17:58:27 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,13 @@
 # include "../srcs/libft/libft.h"
 
 typedef unsigned int	t_uint;
-# define MAP_W 800
-# define MAP_H 400
+# define MAP_W 1920
+# define MAP_H 1050
+
+/* Modifiiers */
+# define X_SEN 0.1
+# define X_ROT 0.03215
+# define X_VEL 32
 
 /* MAP KEYS */
 enum
@@ -38,6 +43,8 @@ enum
 	KEY_D = 100,
 	KEY_LFT_ARR = 65361,
 	KEY_RGT_ARR = 65363,
+	KEY_UP_ARR = 65362,
+	KEY_DOWN_ARR = 65364,
 	KEY_M = 109
 };
 
@@ -48,32 +55,32 @@ enum
 	_S = 2,
 	_D = 3,
 	_LA = 4,
-	_RA = 5
+	_RA = 5,
+	_UA = 6,
+	_DA	= 7
 };
+
+# define TEX_COUNT 5
 
 enum
 {
-	PATH_NO,
-	PATH_SO,
-	PATH_EA,
-	PATH_WE
+	TEX_NO,
+	TEX_SO,
+	TEX_EA,
+	TEX_WE,
+	TEX_HANDS
 };
 
 /* Minimap colors */
 enum
 {
-	CLR_B = 0xadd8e6,
-	CLR_P = 0x111111,
-	CLR_W = 0x3f301d,
-	CLR_F = 0x98ee90,
+	CLR_B = 0x000000,
+	CLR_P = 0x222222,
+	CLR_W = 0x555555,
+	CLR_F = 0x222222,
 	CLR_L = 0xffffff,
-	CLR_D = 0x000000,
+	CLR_D = 0x222222,
 };
-
-/* Modifiiers */
-# define X_SEN 0.15
-# define X_ROT 0.03215
-# define X_VEL 48
 
 typedef struct s_v2i
 {
@@ -104,7 +111,6 @@ typedef struct s_mlx
 	void	*ptr;
 	void	*win;
 	t_img	data;
-	t_img	hands;
 }			t_mlx;
 
 typedef struct s_map
@@ -120,9 +126,9 @@ typedef struct s_app
 	t_v2d	pos;
 	t_v2d	dir;
 	t_v2d	plane;
-	t_v2i	mouse;
-	bool	kmap[6];
-	t_img	tex[4];
+	t_v2d	mouse;
+	bool	kmap[8];
+	t_img	tex[6];
 	t_uint	clr_floor;
 	t_uint	clr_ceil;
 	t_map	map;
@@ -168,5 +174,9 @@ void		readmap(t_app *map, char const *file);
 void		map_clean(t_app *p, int fd, char const *line);
 
 void		cleaner(t_app *p);
+
+void		draw_image(t_app *p, t_img *img, t_v2i pos, t_v2i size);
+t_v2d		v2d(double x, double y);
+t_v2i		v2i(int x, int y);
 
 #endif

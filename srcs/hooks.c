@@ -49,6 +49,10 @@ static int	key_p(int key, t_app *p)
 		p->kmap[_RA] = true;
 	else if (key == KEY_LFT_ARR)
 		p->kmap[_LA] = true;
+	else if (key == KEY_UP_ARR)
+		p->kmap[_UA] = true;
+	else if (key == KEY_DOWN_ARR)
+		p->kmap[_DA] = true;
 	return (0);
 }
 
@@ -66,6 +70,10 @@ static int	key_r(int key, t_app *p)
 		p->kmap[_RA] = false;
 	else if (key == KEY_LFT_ARR)
 		p->kmap[_LA] = false;
+	else if (key == KEY_UP_ARR)
+		p->kmap[_UA] = false;
+	else if (key == KEY_DOWN_ARR)
+		p->kmap[_DA] = false;
 	return (0);
 }
 

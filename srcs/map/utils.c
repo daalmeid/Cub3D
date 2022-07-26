@@ -6,7 +6,7 @@
 /*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:17:16 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/21 16:24:28 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/25 16:24:22 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void	map_clean(t_app *p, int fd, char const *line)
 		close(fd);
 	if (line)
 		free((char *)line);
-	if (p->tex[PATH_NO].path)
-		free(p->tex[PATH_NO].path);
-	if (p->tex[PATH_SO].path)
-		free(p->tex[PATH_SO].path);
-	if (p->tex[PATH_EA].path)
-		free(p->tex[PATH_EA].path);
-	if (p->tex[PATH_WE].path)
-		free(p->tex[PATH_WE].path);
+	if (p->tex[TEX_NO].path)
+		free(p->tex[TEX_NO].path);
+	if (p->tex[TEX_SO].path)
+		free(p->tex[TEX_SO].path);
+	if (p->tex[TEX_EA].path)
+		free(p->tex[TEX_EA].path);
+	if (p->tex[TEX_WE].path)
+		free(p->tex[TEX_WE].path);
 	i = 0;
 	while (i < p->map.size_y)
 		free(p->map.data[i++]);

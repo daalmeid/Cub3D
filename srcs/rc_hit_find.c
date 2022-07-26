@@ -18,7 +18,7 @@ int	get_tex_x(int side, t_raycast rc, t_app *p, double *perp_wall_dist)
 	double	wall_x;
 	int		tex_x;
 
-	if (side == PATH_WE || side == PATH_EA)
+	if (side == TEX_WE || side == TEX_EA)
 	{
 		*perp_wall_dist = rc.side_dist.x - rc.delta_dist.x;
 		wall_x = p->pos.y + *perp_wall_dist * rc.ray_dir.y;
@@ -30,10 +30,10 @@ int	get_tex_x(int side, t_raycast rc, t_app *p, double *perp_wall_dist)
 	}
 	wall_x -= floor((wall_x));
 	tex_x = (int)(wall_x * p->tex[side].width);
-	if ((side == PATH_WE || side == PATH_EA)
+	if ((side == TEX_WE || side == TEX_EA)
 		&& rc.ray_dir.x < 0)
 		tex_x = p->tex[side].width - tex_x - 1;
-	if ((side == PATH_NO || side == PATH_SO)
+	if ((side == TEX_NO || side == TEX_SO)
 		&& rc.ray_dir.y > 0)
 		tex_x = p->tex[side].width - tex_x - 1;
 	return (tex_x);
@@ -45,22 +45,22 @@ static int	get_final_side(char side, t_v2d ray_dir)
 	if (side == 'y')
 	{
 		if (ray_dir.x < 0)
-			side = PATH_EA;
+			side = TEX_EA;
 		else
-			side = PATH_WE;
+			side = TEX_WE;
 	}
 	else
 	{	
 		if (ray_dir.y < 0)
-			side = PATH_SO;
+			side = TEX_SO;
 		else
-			side = PATH_NO;
+			side = TEX_NO;
 	}
 	return (side);
 }
 
 /*3-Checks for a wall hit and which side was hit, while also adding
-to the distance the ray crossed and returns the side hit.*/
+to the distance the ray TEX_CURSORed and returns the side hit.*/
 char	hit_find(t_raycast *rc, char **map)
 {
 	int		hit;

@@ -45,22 +45,18 @@ void	prep_tex_data(t_app *p)
 		perror("Error establishing connection to graphical system");
 		exit(2);
 	}
-	while (i < 4)
+	p->tex[TEX_HANDS].path = "./srcs/textures/pistol.xpm";
+	while (i < TEX_COUNT)
 	{
 		if (!handle_new_image(&p->tex[i], p->mlx.ptr))
 		{
-			printf("Failed to load image\n");
+			ft_putstr_fd("Error\nFailed to load image: ", STDERR_FILENO);
+			ft_putstr_fd(p->tex[i].path, STDERR_FILENO);
+			ft_putchar_fd('\n', STDERR_FILENO);
 			cleaner(p);
 			exit (2);
 		}
 		i++;
-	}
-	p->mlx.hands.path = "./srcs/hands.xpm";
-	if (!handle_new_image(&p->mlx.hands, p->mlx.ptr))
-	{
-		perror("Error creating image");
-		cleaner(p);
-		exit(2);
 	}
 }
 

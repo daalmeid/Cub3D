@@ -17,14 +17,14 @@ static void	wall_painter(int painter, int x, t_tex_rc_info *tex, t_app *p)
 {
 	int	color;
 
-	if (tex->side == PATH_NO)
-		color = *(get_img_pixel(&(p->tex[PATH_NO]), tex->x, (int) tex->pos));
-	else if (tex->side == PATH_SO)
-		color = *(get_img_pixel(&(p->tex[PATH_SO]), tex->x, (int) tex->pos));
-	else if (tex->side == PATH_EA)
-		color = *(get_img_pixel(&(p->tex[PATH_EA]), tex->x, (int) tex->pos));
+	if (tex->side == TEX_NO)
+		color = *(get_img_pixel(&(p->tex[TEX_NO]), tex->x, (int) tex->pos));
+	else if (tex->side == TEX_SO)
+		color = *(get_img_pixel(&(p->tex[TEX_SO]), tex->x, (int) tex->pos));
+	else if (tex->side == TEX_EA)
+		color = *(get_img_pixel(&(p->tex[TEX_EA]), tex->x, (int) tex->pos));
 	else
-		color = *(get_img_pixel(&(p->tex[PATH_WE]), tex->x, (int) tex->pos));
+		color = *(get_img_pixel(&(p->tex[TEX_WE]), tex->x, (int) tex->pos));
 	tex->pos += tex->step;
 	if ((unsigned int) color == 0xff000000)
 	{
@@ -33,7 +33,7 @@ static void	wall_painter(int painter, int x, t_tex_rc_info *tex, t_app *p)
 		else
 			color = p->clr_floor;
 	}
-	else if (tex->side == PATH_NO || tex->side == PATH_SO)
+	else if (tex->side == TEX_NO || tex->side == TEX_SO)
 		color = (int)((color & 0x0000FF) * 0.70)
 			| (int)(((color >> 8) & 0x0000FF) * 0.70) << 8
 			| (int)((color >> 16) * 0.70) << 16;
@@ -48,16 +48,19 @@ void	ft_drawing(int line_height, t_tex_rc_info *tex, int x, t_app *p)
 	int		draw_end;
 	int		painter;
 
-	draw_start = -line_height / 2 + MAP_H / 2;
+	draw_start = (-line_height + round(p->mouse.y)) / 2 + MAP_H / 2;
 	if (draw_start < 0)
 		draw_start = 0;
-	draw_end = line_height / 2 + MAP_H / 2;
-	if (draw_end >= MAP_H)
-		draw_end = MAP_H - 1;
-	tex->step = 1.0 * (p->tex[tex->side].height) / line_height;
-	tex->pos = (draw_start - MAP_H / 2 + line_height / 2) * tex->step;
+	draw_end = (line_height + round(p->mouse.y)) / 2 + MAP_H / 2;
+	if (draw_end > MAP_H)
+		draw_end = MAP_H;
+	tex->step = (double)(p->tex[tex->side].height) / line_height;
+	tex->pos = (draw_start - (MAP_H + round(p->mouse.y)) / 2
+			+ line_height / 2) * tex->step;
+	if (tex->pos < 0)
+		tex->pos = 0;
 	painter = 0;
-	while (painter != draw_start)
+	while (painter < draw_start)
 		my_pixel_put(&p->mlx.data, MAP_W - x - 1, painter++, p->clr_ceil);
 	while (painter < draw_end)
 		wall_painter(painter++, x, tex, p);

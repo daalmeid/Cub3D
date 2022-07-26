@@ -15,7 +15,6 @@
 static void		rotation_handler(t_app *p, double theta);
 static double	handle_mouse(t_app *p);
 static int		handle_key_events(t_app *p);
-static void		draw_hands(t_app *p);
 
 int	handlers(t_app *p)
 {
@@ -25,38 +24,12 @@ int	handlers(t_app *p)
 	else
 		mlx_mouse_hide(p->mlx.ptr, p->mlx.win);
 	raycaster(p);
-	draw_hands(p);
+	draw_image(p, &p->tex[TEX_HANDS],
+		v2i((MAP_W / 5) * 2, 2 + MAP_H - (MAP_H / 3)),
+		v2i(MAP_W / 5, MAP_H / 3));
 	ft_minimap(p, 1, 1);
 	mlx_put_image_to_window(p->mlx.ptr, p->mlx.win, p->mlx.data.ptr, 0, 0);
 	return (0);
-}
-
-static void	draw_hands(t_app *p)
-{
-	t_v2d	pos;
-	t_v2i	put;
-	t_v2d	incr;
-	t_uint	color;
-
-	pos.y = p->mlx.hands.height;
-	put.y = MAP_H;
-	incr.x = fabs((double)p->mlx.hands.width / (MAP_W / 3));
-	incr.y = fabs((double)p->mlx.hands.height / (MAP_H / 3));
-	while (pos.y >= 0)
-	{
-		pos.x = 0;
-		put.x = MAP_W / 3;
-		while (pos.x < p->mlx.hands.width)
-		{
-			color = *get_img_pixel(&p->mlx.hands, (int)(pos.x), (int)(pos.y));
-			if (color != 0xff000000)
-				my_pixel_put(&p->mlx.data, put.x, put.y, color);
-			pos.x += incr.x;
-			put.x += 1;
-		}
-		pos.y -= incr.y;
-		put.y -= 1;
-	}
 }
 
 int	esc_handler(t_app *p)
@@ -89,28 +62,39 @@ static void	rotation_handler(t_app *p, double theta)
 static double	handle_mouse(t_app *p)
 {
 	t_v2i			m_pos;
-	double			mouse_x;
+	t_v2d			mouse;
 
 	if (!p->mouse_enable || !p->in_window)
 		return (0);
-	mouse_x = 0.0;
+	mouse.x = 0.0;
+	mouse.y = 0.0;
 	mlx_mouse_get_pos(p->mlx.ptr, p->mlx.win, &(m_pos.x), &(m_pos.y));
 	if (m_pos.x >= 0 && m_pos.x <= MAP_W && m_pos.y >= 0 && m_pos.y <= MAP_H
 		&& (m_pos.x != MAP_W / 2 || m_pos.y != MAP_H / 2))
 	{
 		if (m_pos.x < MAP_W / 2 - 1)
-			mouse_x = -((double)(MAP_W / 2 - m_pos.x) / 64) * X_SEN;
+			mouse.x = -((double)(MAP_W / 2 - m_pos.x) / 64) * X_SEN;
 		else if (m_pos.x > MAP_W / 2 + 1)
-			mouse_x = ((double)-(MAP_W / 2 - m_pos.x) / 64) * X_SEN;
+			mouse.x = ((double)-(MAP_W / 2 - m_pos.x) / 64) * X_SEN;
+		if (m_pos.y < MAP_H / 2 - 1)
+			mouse.y = -((double)-(MAP_H / 2 - m_pos.y)) * X_SEN;
+		else if (m_pos.y > MAP_H / 2 + 1)
+			mouse.y = ((double)(MAP_H / 2 - m_pos.y)) * X_SEN;
+		if (mouse.y != 0)
+			p->mouse.y += mouse.y * (MAP_H / 100);
 		mlx_mouse_move(p->mlx.ptr, p->mlx.win, MAP_W / 2, MAP_H / 2);
 	}
-	return (mouse_x);
+	return (mouse.x);
 }
 
 static int	handle_key_events(t_app *p)
 {
 	t_v2d	v;
 
+	if (p->kmap[_UA])
+		p->mouse.y += (MAP_H / !00) / 32;
+	if (p->kmap[_DA])
+		p->mouse.y -= (MAP_H / !00) / 32;
 	v.x = ((p->dir.x * p->kmap[_W]) + (p->dir.y * p->kmap[_A])
 			- (p->dir.x * p->kmap[_S]) - (p->dir.y * p->kmap[_D])) / X_VEL;
 	v.y = ((p->dir.y * p->kmap[_W]) - (p->dir.x * p->kmap[_A])
@@ -119,5 +103,9 @@ static int	handle_key_events(t_app *p)
 		(handle_mouse(p) + (p->kmap[_RA] * X_ROT - p->kmap[_LA] * X_ROT)) / 2);
 	if (v.x != 0 || v.y != 0)
 		collision_behaviour(p, v);
+	if (p->mouse.y >= MAP_H)
+		p->mouse.y = MAP_H - 1;
+	else if (p->mouse.y < -MAP_H)
+		p->mouse.y = -(MAP_H - 1);
 	return (0);
 }

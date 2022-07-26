@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:16:24 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/19 18:16:25 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/25 16:24:22 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ static void	readmap_match(t_mp *mp)
 	else if (mp->line[0] == 'C')
 		mp->p->clr_ceil = readrgb(mp, 'C');
 	else if (ft_strncmp(mp->line, "NO", 2) == 0)
-		mp->p->tex[PATH_NO].path = readword(mp, PATH_NO);
+		mp->p->tex[TEX_NO].path = readword(mp, TEX_NO);
 	else if (ft_strncmp(mp->line, "SO", 2) == 0)
-		mp->p->tex[PATH_SO].path = readword(mp, PATH_SO);
+		mp->p->tex[TEX_SO].path = readword(mp, TEX_SO);
 	else if (ft_strncmp(mp->line, "EA", 2) == 0)
-		mp->p->tex[PATH_EA].path = readword(mp, PATH_EA);
+		mp->p->tex[TEX_EA].path = readword(mp, TEX_EA);
 	else if (ft_strncmp(mp->line, "WE", 2) == 0)
-		mp->p->tex[PATH_WE].path = readword(mp, PATH_WE);
+		mp->p->tex[TEX_WE].path = readword(mp, TEX_WE);
 	else
 		map_error(1, "unknown type identifier\n", mp);
 	mp->count += 1;

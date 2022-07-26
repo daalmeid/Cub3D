@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daalmeid <daalmeid@student.42.fr>          +#+  +:+       +#+         #
+#    By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/22 14:20:33 by daalmeid         ###   ########.fr        #
+#    Updated: 2022/07/25 16:16:28 by rafernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS_	=	main.c\
 			rc_painter.c\
 			rc_hit_find.c\
 			cleaner.c\
+			vector.c\
 			map/content.c\
 			map/errors.c\
 			map/map.c\
@@ -70,6 +71,9 @@ INCS	=	$(addprefix -I, $(INCS_))
 ################## RULES ###################
 
 all: $(NAME)
+
+norm:
+	norminette srcs/libft/*.c srcs/map/*.c srcs/*.c include/libc3d.h srcs/map/c3d_map.h srcs/libft/libft.h
 
 $(NAME): $(DEPS) $(_OBJ) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(INCS) $(LDLIBS) $(LDFLAGS) -o $(NAME)
@@ -100,4 +104,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re force
+.PHONY: all norm clean fclean re force
