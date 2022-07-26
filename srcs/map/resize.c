@@ -73,7 +73,7 @@ static void	readmap_adjust_x(t_mp *mp)
 		if (!tmp)
 			map_error(1, NULL, mp);
 		while (mp->p->map.data[row][mp->off_l + i] != '\n'
-			&& mp->p->map.data[row][i] != '\0' && (size_t)i < mp->p->map.size_x)
+			&& mp->p->map.data[row][mp->off_l + i] != '\0' && (size_t)i < mp->p->map.size_x)
 		{
 			tmp[i] = mp->p->map.data[row][mp->off_l + i];
 			i++;

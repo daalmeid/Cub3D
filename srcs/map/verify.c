@@ -32,7 +32,10 @@ void	readmap_verify(t_mp *mp)
 				set_player(mp, i, j, mp->p->map.data[j][i]);
 			else if (mp->p->map.data[j][i] != '0'
 				&& mp->p->map.data[j][i] != '1' && mp->p->map.data[j][i] != ' ')
+			{
+				printf("%d, i: %ld, j: %ld\n", mp->p->map.data[j][i], i, j);
 				map_error(1, "Unknown map tile identifier\n", mp);
+			}	
 			if ((i == 0 || j == 0
 					|| i == mp->p->map.size_x - 1 || j == mp->p->map.size_y - 1)
 				&& mp->p->map.data[j][i] != '1' && mp->p->map.data[j][i] != ' ')
@@ -51,17 +54,13 @@ static int	isnearby(t_mp *mp, size_t x, size_t y, char c)
 	char	**map;
 
 	map = mp->p->map.data;
-	if (x != 0 && (map[y][x - 1] == c
-		|| (y != 0 && map[y - 1][x - 1] == c)))
+	if (x != 0 && map[y][x - 1] == c)
 		return (true);
-	if (x != mp->p->map.size_x -1 && (map[y][x + 1] == c
-		|| (y != mp->p->map.size_y - 1 && map[y + 1][x + 1] == c)))
+	if (x != mp->p->map.size_x -1 && map[y][x + 1] == c)
 		return (true);
-	if (y != 0 && (map[y - 1][x] == c
-		|| (x != mp->p->map.size_x - 1 && map[y - 1][x + 1] == c)))
+	if (y != 0 && map[y - 1][x] == c)
 		return (true);
-	if (y != mp->p->map.size_y - 1 && (map[y + 1][x] == c
-		|| (x != 0 && map[y + 1][x - 1] == c)))
+	if (y != mp->p->map.size_y - 1 && map[y + 1][x] == c)
 		return (true);
 	return (false);
 }

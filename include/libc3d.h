@@ -74,10 +74,10 @@ enum
 /* Minimap colors */
 enum
 {
-	CLR_B = 0x000000,
+	CLR_F = 0x555555,
 	CLR_P = 0x222222,
-	CLR_W = 0x555555,
-	CLR_F = 0x222222,
+	CLR_B = 0xbbbbbb,
+	CLR_W = 0x222222,
 	CLR_L = 0xffffff,
 	CLR_D = 0x222222,
 };
@@ -134,6 +134,8 @@ typedef struct s_app
 	t_map	map;
 	bool	in_window;
 	bool	mouse_enable;
+	double	time;
+	double	mov_speed;
 }			t_app;
 
 typedef struct s_raycast

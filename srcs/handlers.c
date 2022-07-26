@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/libc3d.h"
+#include <sys/time.h>
 
 static void		rotation_handler(t_app *p, double theta);
 static double	handle_mouse(t_app *p);
@@ -18,16 +19,24 @@ static int		handle_key_events(t_app *p);
 
 int	handlers(t_app *p)
 {
-	handle_key_events(p);
-	if (!p->mouse_enable)
-		mlx_mouse_show(p->mlx.ptr, p->mlx.win);
-	else
-		mlx_mouse_hide(p->mlx.ptr, p->mlx.win);
+	struct timeval time;
+	double	time2;
+
+	gettimeofday(&time, NULL);
+	time2 = p->time;
+	p->time = time.tv_sec + (time.tv_usec / 1000000.0);
+	p->mov_speed = (p->time - time2) * 64;
+	//printf("%f\n", p->mov_speed);
 	raycaster(p);
 	draw_image(p, &p->tex[TEX_HANDS],
 		v2i((MAP_W / 5) * 2, 2 + MAP_H - (MAP_H / 3)),
 		v2i(MAP_W / 5, MAP_H / 3));
 	ft_minimap(p, 1, 1);
+	handle_key_events(p);
+	if (!p->mouse_enable)
+		mlx_mouse_show(p->mlx.ptr, p->mlx.win);
+	else
+		mlx_mouse_hide(p->mlx.ptr, p->mlx.win);
 	mlx_put_image_to_window(p->mlx.ptr, p->mlx.win, p->mlx.data.ptr, 0, 0);
 	return (0);
 }
@@ -92,15 +101,15 @@ static int	handle_key_events(t_app *p)
 	t_v2d	v;
 
 	if (p->kmap[_UA])
-		p->mouse.y += (MAP_H / !00) / 32;
+		p->mouse.y += (MAP_H / 100) / 32;
 	if (p->kmap[_DA])
-		p->mouse.y -= (MAP_H / !00) / 32;
-	v.x = ((p->dir.x * p->kmap[_W]) + (p->dir.y * p->kmap[_A])
-			- (p->dir.x * p->kmap[_S]) - (p->dir.y * p->kmap[_D])) / X_VEL;
-	v.y = ((p->dir.y * p->kmap[_W]) - (p->dir.x * p->kmap[_A])
-			- (p->dir.y * p->kmap[_S]) + (p->dir.x) * p->kmap[_D]) / X_VEL;
+		p->mouse.y -= (MAP_H / 100) / 32;
 	rotation_handler(p,
-		(handle_mouse(p) + (p->kmap[_RA] * X_ROT - p->kmap[_LA] * X_ROT)) / 2);
+		((handle_mouse(p) + (p->kmap[_RA] * X_ROT - p->kmap[_LA] * X_ROT)) / 2) * p->mov_speed);
+	v.x = (((p->dir.x * p->kmap[_W]) + (p->dir.y * p->kmap[_A])
+			- (p->dir.x * p->kmap[_S]) - (p->dir.y * p->kmap[_D])) / X_VEL) * p->mov_speed;
+	v.y = (((p->dir.y * p->kmap[_W]) - (p->dir.x * p->kmap[_A])
+			- (p->dir.y * p->kmap[_S]) + (p->dir.x) * p->kmap[_D]) / X_VEL) * p->mov_speed;
 	if (v.x != 0 || v.y != 0)
 		collision_behaviour(p, v);
 	if (p->mouse.y >= MAP_H)
