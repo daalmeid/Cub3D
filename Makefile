@@ -6,7 +6,7 @@
 #    By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/26 16:48:15 by daalmeid          #+#    #+#              #
-#    Updated: 2022/07/25 16:16:28 by rafernan         ###   ########.fr        #
+#    Updated: 2022/07/27 15:45:47 by rafernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,7 @@ LDFLAGS	=	-lmlx -lft -lXext -lX11 -lm
 LDLIBS_	=	./srcs/libmlx ./srcs/libft /usr/lib
 LDLIBS	=	$(addprefix -L , $(LDLIBS_))
 
-INCS_	=	./include/ /usr/include ./src/libmlx ./src/libft
+INCS_	=	./include/ /usr/include ./srcs/libmlx ./srcs/libft
 INCS	=	$(addprefix -I, $(INCS_))
 
 ################## RULES ###################
