@@ -6,7 +6,7 @@
 /*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:53:15 by daalmeid          #+#    #+#             */
-/*   Updated: 2022/07/25 17:58:27 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/27 11:19:17 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,16 @@
 # include <limits.h>
 # include "../srcs/libmlx/mlx.h"
 # include "../srcs/libft/libft.h"
+# include <sys/time.h>
 
 typedef unsigned int	t_uint;
 # define MAP_W 1920
 # define MAP_H 1050
 
 /* Modifiiers */
-# define X_SEN 0.1
-# define X_ROT 0.03215
-# define X_VEL 32
+# define X_SEN 0.9
+# define X_VEL 0.75
+# define X_ROT 0.02
 
 /* MAP KEYS */
 enum
@@ -134,8 +135,7 @@ typedef struct s_app
 	t_map	map;
 	bool	in_window;
 	bool	mouse_enable;
-	double	time;
-	double	mov_speed;
+	double	time_elapsed;
 }			t_app;
 
 typedef struct s_raycast

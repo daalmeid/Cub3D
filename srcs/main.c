@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/libc3d.h"
-#include <sys/time.h>
-
 
 void	prep_ptrs(t_app *p)
 {	
@@ -66,9 +64,7 @@ int	main(int argc, char **argv)
 {
 	t_app	p;
 	char	*tmp;
-	struct timeval time;
-	
-	gettimeofday(&time, NULL);
+
 	ft_memset(&p, 0, sizeof(t_app));
 	if (argc != 2)
 	{
@@ -81,7 +77,6 @@ int	main(int argc, char **argv)
 		ft_putstr_fd("Error\nUnknown map file extension\n", STDERR_FILENO);
 		exit(1);
 	}
-	p.time = time.tv_sec + (time.tv_usec / 1000000.0);
 	readmap(&p, argv[1]);
 	prep_tex_data(&p);
 	prep_ptrs(&p);

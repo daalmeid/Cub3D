@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   resize.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:14:22 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/19 18:14:23 by marvin           ###   ########.fr       */
+/*   Updated: 2022/07/27 10:41:14 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ static void	readmap_adjust_x(t_mp *mp)
 		if (!tmp)
 			map_error(1, NULL, mp);
 		while (mp->p->map.data[row][mp->off_l + i] != '\n'
-			&& mp->p->map.data[row][mp->off_l + i] != '\0' && (size_t)i < mp->p->map.size_x)
+			&& mp->p->map.data[row][mp->off_l + i] != '\0'
+			&& (size_t)i < mp->p->map.size_x)
 		{
 			tmp[i] = mp->p->map.data[row][mp->off_l + i];
 			i++;

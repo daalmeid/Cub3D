@@ -6,7 +6,7 @@
 /*   By: rafernan <rafernan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 18:20:57 by marvin            #+#    #+#             */
-/*   Updated: 2022/07/20 17:53:21 by rafernan         ###   ########.fr       */
+/*   Updated: 2022/07/27 10:35:21 by rafernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,7 @@ void	readmap_verify(t_mp *mp)
 				set_player(mp, i, j, mp->p->map.data[j][i]);
 			else if (mp->p->map.data[j][i] != '0'
 				&& mp->p->map.data[j][i] != '1' && mp->p->map.data[j][i] != ' ')
-			{
-				printf("%d, i: %ld, j: %ld\n", mp->p->map.data[j][i], i, j);
 				map_error(1, "Unknown map tile identifier\n", mp);
-			}	
 			if ((i == 0 || j == 0
 					|| i == mp->p->map.size_x - 1 || j == mp->p->map.size_y - 1)
 				&& mp->p->map.data[j][i] != '1' && mp->p->map.data[j][i] != ' ')
