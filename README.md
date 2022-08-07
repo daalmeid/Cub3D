@@ -1,7 +1,7 @@
 # Cub3D
 Creation of a "realistic" 3D maze using a 2D map and Raycasting.
 
-### How to use it (WSL 2 required):
+### How to use it (WSL 2 steps, it should work fine using make on Linux):
 
 First of all, you will need to install XMing. You can do so by following the next few steps (taken from https://harm-smits.github.io/42docs/libs/minilibx/getting_started.html#getting-a-screen-on-windows-10-wsl2):
 
